@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app_name }} | {{ app_description }}</title>
+    <!-- Google Fonts: Inter & Space Grotesk -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- TradingView Lightweight Charts CDN -->
+    <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+    
+    <style>
+        :root {
+            --bg-base: #06090e;
+            --bg-surface: #0d1117;
+            --bg-card: #161b22;
+            --border-color: #21262d;
+            --border-hover: #30363d;
+            --text-primary: #f0f6fc;
+            --text-secondary: #8b949e;
+            --text-muted: #484f58;
+            --accent-blue: #58a6ff;
+            --accent-cyan: #00f2fe;
+            --accent-green: #26a69a;
+            --accent-red: #ef5350;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.6);
+            --glow-cyan: 0 0 15px rgba(0, 242, 254, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Top Navigation Header */
+        header {
+            background-color: var(--bg-surface);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--bg-base);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            box-shadow: var(--glow-cyan);
+        }
+
+        .logo-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, #b9c3ce);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .header-tag {
+            background-color: rgba(88, 166, 255, 0.1);
+            color: var(--accent-blue);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            border: 1px solid rgba(88, 166, 255, 0.2);
+        }
+
+        /* Main Workspace */
+        main {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            min-height: calc(100vh - 65px);
+        }
+
+        /* Sidebar Control Panel */
+        .sidebar {
+            background-color: var(--bg-surface);
+            border-right: 1px solid var(--border-color);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+            overflow-y: auto;
+        }
+
+        .panel-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        input, select {
+            background-color: var(--bg-base);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.2s ease-in-out;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.15);
+        }
+
+        /* Ticker input styling */
+        .ticker-input {
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .info-note {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            background-color: rgba(22, 27, 34, 0.5);
+            padding: 0.6rem;
+            border-radius: 6px;
+            border-left: 3px solid var(--accent-blue);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-blue), #1f6feb);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 0.85rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 12px rgba(31, 111, 235, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(31, 111, 235, 0.35);
+            background: linear-gradient(135deg, #79c0ff, #1f6feb);
+        }
+
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+
+        /* Dashboard Container */
+        .dashboard {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            overflow-y: auto;
+            background-color: var(--bg-base);
+        }
+
+        /* KPI Metric Cards */
+        .kpi-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .kpi-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            box-shadow: var(--shadow-sm);
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .kpi-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+        }
+
+        .kpi-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .kpi-subtext {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .positive { color: var(--accent-green) !important; }
+        .negative { color: var(--accent-red) !important; }
+
+        /* Chart Canvas & Configuration Card */
+        .chart-wrapper {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            box-shadow: var(--shadow-md);
+            position: relative;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .chart-title-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .chart-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .chart-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Toggle Switches */
+        .toggle-group {
+            display: flex;
+            background-color: var(--bg-base);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.2rem;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .toggle-btn.active {
+            background-color: var(--bg-surface);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Chart Rendering Container */
+        .chart-container {
+            width: 100%;
+            height: 480px;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #161b22;
+        }
+
+        /* Bottom Row Grid: Inspector + Log info */
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .details-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .inspector-placeholder {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-style: italic;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            min-height: 100px;
+        }
+
+        .inspector-data {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .data-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+            background-color: var(--bg-surface);
+            padding: 0.6rem 0.8rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .data-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+        }
+
+        .data-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Loader Overlay */
+        .loader-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(22, 27, 34, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .loader-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(88, 166, 255, 0.1);
+            border-top: 3px solid var(--accent-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loader-text {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Error Banner */
+        .error-banner {
+            display: none;
+            background-color: rgba(239, 83, 80, 0.1);
+            border: 1px solid rgba(239, 83, 80, 0.3);
+            color: #ff8080;
+            padding: 1rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .error-banner.active {
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--bg-surface);
+            border-top: 1px solid var(--border-color);
+            padding: 1.2rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: auto;
+        }
+
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-base);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--border-hover);
+        }
+
+        /* Responsiveness */
+        @media (max-width: 1024px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header>
+        <div class="logo-container">
+            <div class="logo-icon">S</div>
+            <div class="logo-text">{{ app_name }}</div>
+            <div class="header-tag">{{ app_description }}</div>
+        </div>
+        <div style="font-size: 0.85rem; color: var(--text-secondary);" id="current-time-display">
+            StAnT loaded
+        </div>
+    </header>
+
+    <!-- App Body -->
+    <main>
+        <!-- Sidebar Control Panel -->
+        <section class="sidebar">
+            <div>
+                <h3 class="panel-title">Data Parameters</h3>
+            </div>
+            
+            <form id="parameters-form" onsubmit="event.preventDefault(); fetchStockData();">
+                <div style="display: flex; flex-direction: column; gap: 1.2rem;">
+                    <!-- Ticker Input -->
+                    <div class="form-group">
+                        <label for="ticker-input">Ticker Symbol</label>
+                        <input type="text" id="ticker-input" class="ticker-input" placeholder="e.g. AAPL, VUSA, VUSA.L" required value="AAPL">
+                    </div>
+
+                    <!-- Interval Dropdown -->
+                    <div class="form-group">
+                        <label for="interval-select">Data Resolution (Interval)</label>
+                        <select id="interval-select" onchange="handleIntervalChange()">
+                            <option value="1m">1 Minute (Max 7 Days)</option>
+                            <option value="5m">5 Minutes (Max 60 Days)</option>
+                            <option value="15m">15 Minutes (Max 60 Days)</option>
+                            <option value="1h">1 Hour (Max 730 Days)</option>
+                            <option value="1d" selected>Daily (Full History)</option>
+                            <option value="1wk">Weekly (Full History)</option>
+                            <option value="1mo">Monthly (Full History)</option>
+                        </select>
+                    </div>
+
+                    <!-- Date Range Inputs -->
+                    <div class="form-group">
+                        <label for="start-date-input">Start Date (Optional)</label>
+                        <input type="date" id="start-date-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="end-date-input">End Date (Optional)</label>
+                        <input type="date" id="end-date-input">
+                    </div>
+
+                    <div class="info-note" id="limits-disclaimer">
+                        Yahoo Finance daily data (`1d`) supports the entire historical range. Date filters are optional.
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn-primary" id="submit-btn">
+                        <span>Analyze Ticker</span>
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Dashboard Panel -->
+        <section class="dashboard">
+            <!-- Error Banner -->
+            <div class="error-banner" id="error-banner"></div>
+
+            <!-- KPIs -->
+            <div class="kpi-container">
+                <!-- Last Close KPI -->
+                <div class="kpi-card">
+                    <span class="kpi-label">Last Price</span>
+                    <span class="kpi-value" id="kpi-last-close">—</span>
+                    <span class="kpi-subtext" id="kpi-last-time">Select a ticker to load</span>
+                </div>
+
+                <!-- Total Return KPI -->
+                <div class="kpi-card">
+                    <span class="kpi-label">Return (Period)</span>
+                    <span class="kpi-value" id="kpi-return">—</span>
+                    <span class="kpi-subtext" id="kpi-return-sub">From start to end</span>
+                </div>
+
+                <!-- High/Low KPI -->
+                <div class="kpi-card">
+                    <span class="kpi-label">Range High / Low</span>
+                    <span class="kpi-value" style="font-size: 1.3rem;" id="kpi-high-low">—</span>
+                    <span class="kpi-subtext" id="kpi-high-low-sub">Min and max prices</span>
+                </div>
+
+                <!-- Volume KPI -->
+                <div class="kpi-card">
+                    <span class="kpi-label">Volume (Period)</span>
+                    <span class="kpi-value" style="font-size: 1.4rem;" id="kpi-volume">—</span>
+                    <span class="kpi-subtext" id="kpi-volume-sub">Cumulative trades</span>
+                </div>
+            </div>
+
+            <!-- Chart Card -->
+            <div class="chart-wrapper">
+                <!-- Loader Overlay -->
+                <div class="loader-overlay" id="loader-overlay">
+                    <div class="spinner"></div>
+                    <div class="loader-text" id="loader-text">Fetching data...</div>
+                </div>
+
+                <div class="chart-header">
+                    <div class="chart-title-group">
+                        <span class="chart-title" id="chart-main-title">AAPL Interactive Chart</span>
+                        <span class="chart-subtitle" id="chart-sub-title">Daily candles, full available history</span>
+                    </div>
+
+                    <!-- Chart Style Toggles -->
+                    <div class="toggle-group">
+                        <button class="toggle-btn active" id="btn-candlestick" onclick="setChartType('candlestick')">Candles</button>
+                        <button class="toggle-btn" id="btn-line" onclick="setChartType('line')">Line</button>
+                    </div>
+                </div>
+
+                <!-- Chart Div Target -->
+                <div class="chart-container" id="chart-container"></div>
+            </div>
+
+            <!-- Bottom Detail Panel -->
+            <div class="details-grid">
+                <!-- Point Inspector Panel -->
+                <div class="details-card">
+                    <h3 class="panel-title" style="margin-bottom: 0.5rem;">Price Inspector</h3>
+                    
+                    <div class="inspector-placeholder" id="inspector-placeholder">
+                        Click on any price candle or point in the chart to inspect details
+                    </div>
+                    
+                    <div class="inspector-data" id="inspector-data" style="display: none;">
+                        <div class="data-item">
+                            <span class="data-label">Selected Date / Time</span>
+                            <span class="data-value" id="inspect-time">—</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Open Price</span>
+                            <span class="data-value" id="inspect-open">—</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">High Price</span>
+                            <span class="data-value" id="inspect-high">—</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Low Price</span>
+                            <span class="data-value" id="inspect-low">—</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Close Price</span>
+                            <span class="data-value" id="inspect-close">—</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Trading Volume</span>
+                            <span class="data-value" id="inspect-volume">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guidelines Card -->
+                <div class="details-card">
+                    <h3 class="panel-title">Interactive Guide</h3>
+                    <div style="font-size: 0.9rem; line-height: 1.6; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.8rem;">
+                        <p>💡 <strong>Zoom:</strong> Hover over the chart and use your <strong>mouse scroll wheel</strong> or pinch on a trackpad to zoom in/out.</p>
+                        <p>👈 <strong>Pan:</strong> Click and <strong>drag</strong> the chart horizontally to move across time.</p>
+                        <p>🖱️ <strong>Inspect:</strong> Hovering displays a precise crosshair. <strong>Clicking</strong> will lock that candle's details inside the Price Inspector panel on the left.</p>
+                        <p>🔄 <strong>Reset view:</strong> To reset the zoom/panning to fit the full dataset, double click anywhere on the chart.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2026 StAnT. Built with Python Flask & TradingView Lightweight Charts.
+    </footer>
+
+    <!-- App JS Logic -->
+    <script>
+        let chart = null;
+        let candlestickSeries = null;
+        let lineSeries = null;
+        let volumeSeries = null;
+        
+        let loadedChartData = [];
+        let loadedVolumeData = [];
+        let currentChartType = 'candlestick'; // candlestick or line
+
+        // Handle interval information text
+        function handleIntervalChange() {
+            const select = document.getElementById('interval-select');
+            const value = select.value;
+            const disclaimer = document.getElementById('limits-disclaimer');
+            
+            let message = '';
+            if (value === '1m') {
+                message = '⚠️ 1-minute data has a strict maximum historical window of the last 7 days.';
+            } else if (value === '5m' || value === '15m') {
+                message = '⚠️ Intraday 5/15-minute data has a historical limit of the last 60 days.';
+            } else if (value === '1h') {
+                message = '⚠️ 1-hour data has a historical limit of the last 730 days (2 years).';
+            } else {
+                message = 'Yahoo Finance daily or longer interval data (`' + value + '`) supports the entire historical range. Date filters are optional.';
+            }
+            disclaimer.innerHTML = message;
+        }
+
+        // Initialize the TradingView Lightweight Chart
+        function addSeriesCompat(type, options) {
+            // Lightweight Charts v5 uses addSeries(Constructor, options), while v4 uses addXSeries.
+            const v5Map = {
+                candlestick: LightweightCharts.CandlestickSeries,
+                line: LightweightCharts.LineSeries,
+                histogram: LightweightCharts.HistogramSeries
+            };
+
+            const v4MethodMap = {
+                candlestick: 'addCandlestickSeries',
+                line: 'addLineSeries',
+                histogram: 'addHistogramSeries'
+            };
+
+            const v4Method = v4MethodMap[type];
+            if (chart && typeof chart[v4Method] === 'function') {
+                return chart[v4Method](options);
+            }
+
+            if (chart && typeof chart.addSeries === 'function' && v5Map[type]) {
+                return chart.addSeries(v5Map[type], options);
+            }
+
+            throw new Error('Unsupported Lightweight Charts version: could not create series');
+        }
+
+        function initChart() {
+            const container = document.getElementById('chart-container');
+            
+            // Clear any existing contents
+            container.innerHTML = '';
+            
+            chart = LightweightCharts.createChart(container, {
+                width: container.clientWidth,
+                height: container.clientHeight,
+                layout: {
+                    background: { type: 'solid', color: '#161b22' },
+                    textColor: '#8b949e',
+                },
+                grid: {
+                    vertLines: { color: '#21262d' },
+                    horzLines: { color: '#21262d' },
+                },
+                crosshair: {
+                    mode: LightweightCharts.CrosshairMode.Normal,
+                    vertLine: {
+                        color: 'rgba(88, 166, 255, 0.4)',
+                        width: 1,
+                        style: 0,
+                    },
+                    horzLine: {
+                        color: 'rgba(88, 166, 255, 0.4)',
+                        width: 1,
+                        style: 0,
+                    },
+                },
+                rightPriceScale: {
+                    borderColor: '#30363d',
+                },
+                timeScale: {
+                    borderColor: '#30363d',
+                    timeVisible: true,
+                    secondsVisible: false,
+                },
+            });
+
+            // Create Candlestick series
+            candlestickSeries = addSeriesCompat('candlestick', {
+                upColor: '#26a69a',
+                downColor: '#ef5350',
+                borderVisible: false,
+                wickUpColor: '#26a69a',
+                wickDownColor: '#ef5350',
+            });
+
+            // Create Line series
+            lineSeries = addSeriesCompat('line', {
+                color: '#58a6ff',
+                lineWidth: 2,
+                visible: false, // Default hidden
+            });
+
+            // Create Volume series overlay (positioned at the bottom 20% of the chart)
+            volumeSeries = addSeriesCompat('histogram', {
+                priceFormat: {
+                    type: 'volume',
+                },
+                priceScaleId: '', // Overlay style
+            });
+            
+            volumeSeries.priceScale().applyOptions({
+                scaleMargins: {
+                    top: 0.8, // Leave top 80% free for main series
+                    bottom: 0,
+                },
+            });
+
+            // Set up click handlers for inspection
+            chart.subscribeClick((param) => {
+                const placeholder = document.getElementById('inspector-placeholder');
+                const infoPanel = document.getElementById('inspector-data');
+                
+                if (!param || !param.time) {
+                    // Clicked outside a data point - do not clear, let them keep details
+                    return;
+                }
+
+                // Retrieve data point from loaded data
+                const candleData = param.seriesData.get(currentChartType === 'candlestick' ? candlestickSeries : lineSeries);
+                const volData = param.seriesData.get(volumeSeries);
+                
+                if (candleData) {
+                    placeholder.style.display = 'none';
+                    infoPanel.style.display = 'grid';
+                    
+                    // Format time
+                    let formattedTime = '';
+                    if (typeof param.time === 'number') {
+                        // UNIX timestamp for intraday
+                        const d = new Date(param.time * 1000);
+                        formattedTime = d.toLocaleString();
+                    } else {
+                        // String YYYY-MM-DD
+                        formattedTime = param.time;
+                    }
+                    
+                    document.getElementById('inspect-time').innerText = formattedTime;
+                    
+                    if (currentChartType === 'candlestick') {
+                        document.getElementById('inspect-open').innerText = '$' + candleData.open.toFixed(2);
+                        document.getElementById('inspect-high').innerText = '$' + candleData.high.toFixed(2);
+                        document.getElementById('inspect-low').innerText = '$' + candleData.low.toFixed(2);
+                        document.getElementById('inspect-close').innerText = '$' + candleData.close.toFixed(2);
+                    } else {
+                        // Line series returns a single float price
+                        document.getElementById('inspect-open').innerText = 'N/A';
+                        document.getElementById('inspect-high').innerText = 'N/A';
+                        document.getElementById('inspect-low').innerText = 'N/A';
+                        document.getElementById('inspect-close').innerText = '$' + candleData.value.toFixed(2);
+                    }
+                    
+                    if (volData) {
+                        document.getElementById('inspect-volume').innerText = formatVolume(volData.value);
+                    } else {
+                        document.getElementById('inspect-volume').innerText = '—';
+                    }
+                }
+            });
+
+            // Handle browser resize
+            const resizeObserver = new ResizeObserver(entries => {
+                if (entries.length === 0 || !chart) return;
+                const newWidth = entries[0].contentRect.width;
+                const newHeight = entries[0].contentRect.height;
+                chart.applyOptions({ width: newWidth, height: newHeight });
+            });
+            resizeObserver.observe(container);
+        }
+
+        // Switch chart styles
+        function setChartType(type) {
+            currentChartType = type;
+            const btnCandles = document.getElementById('btn-candlestick');
+            const btnLine = document.getElementById('btn-line');
+            
+            if (type === 'candlestick') {
+                btnCandles.classList.add('active');
+                btnLine.classList.remove('active');
+                candlestickSeries.applyOptions({ visible: true });
+                lineSeries.applyOptions({ visible: false });
+            } else {
+                btnCandles.classList.remove('active');
+                btnLine.classList.add('active');
+                candlestickSeries.applyOptions({ visible: false });
+                lineSeries.applyOptions({ visible: true });
+            }
+        }
+
+        // Format volume helper (e.g. 1.2M, 500K)
+        function formatVolume(val) {
+            if (val >= 1000000000) {
+                return (val / 1000000000).toFixed(2) + 'B';
+            }
+            if (val >= 1000000) {
+                return (val / 1000000).toFixed(2) + 'M';
+            }
+            if (val >= 1000) {
+                return (val / 1000).toFixed(1) + 'K';
+            }
+            return val.toString();
+        }
+
+        // Fetch data from Flask API
+        async function fetchStockData() {
+            const errorBanner = document.getElementById('error-banner');
+            const loader = document.getElementById('loader-overlay');
+
+            if (!candlestickSeries || !lineSeries || !volumeSeries || !chart) {
+                errorBanner.innerText = 'Chart failed to initialize. Please refresh the page.';
+                errorBanner.classList.add('active');
+                return;
+            }
+            
+            // Hide error banner and show spinner
+            errorBanner.classList.remove('active');
+            loader.classList.add('active');
+            
+            const ticker = document.getElementById('ticker-input').value.trim();
+            const interval = document.getElementById('interval-select').value;
+            const start = document.getElementById('start-date-input').value;
+            const end = document.getElementById('end-date-input').value;
+            
+            try {
+                const response = await fetch(`/api/stock?ticker=${encodeURIComponent(ticker)}&interval=${interval}&start=${start}&end=${end}`);
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Server error occurred while retrieving stock data');
+                }
+                
+                // Populate Chart Data
+                loadedChartData = data.chart_data;
+                loadedVolumeData = data.volume_data;
+                
+                // Feed data into Chart Series
+                candlestickSeries.setData(loadedChartData);
+                
+                // Convert OHLC data into simple {time, value} objects for the line series
+                const lineData = loadedChartData.map(item => ({
+                    time: item.time,
+                    value: item.close
+                }));
+                lineSeries.setData(lineData);
+                
+                // Feed volume data
+                volumeSeries.setData(loadedVolumeData);
+                
+                // Reset/adjust time scale view to fit all data
+                chart.timeScale().fitContent();
+                
+                // Update titles
+                const tickerUpper = data.ticker;
+                document.getElementById('chart-main-title').innerText = `${tickerUpper} Interactive Chart`;
+                
+                let rangeStr = 'Full History';
+                if (start || end) {
+                    rangeStr = `${start || 'Start'} to ${end || 'End'}`;
+                }
+                document.getElementById('chart-sub-title').innerText = `${getIntervalName(interval)} interval, ${rangeStr}`;
+                
+                // Populate KPI stats
+                const stats = data.stats;
+                const lastClose = loadedChartData[loadedChartData.length - 1].close;
+                
+                // Price formatting
+                document.getElementById('kpi-last-close').innerText = '$' + lastClose.toFixed(2);
+                
+                // Format last date
+                let lastTimeStr = '';
+                const lastTimeVal = loadedChartData[loadedChartData.length - 1].time;
+                if (typeof lastTimeVal === 'number') {
+                    const dateObj = new Date(lastTimeVal * 1000);
+                    lastTimeStr = dateObj.toLocaleString();
+                } else {
+                    lastTimeStr = lastTimeVal;
+                }
+                document.getElementById('kpi-last-time').innerText = `As of ${lastTimeStr}`;
+                
+                // Return Rate format
+                const retVal = stats.return_pct;
+                const retEl = document.getElementById('kpi-return');
+                retEl.innerText = (retVal >= 0 ? '+' : '') + retVal.toFixed(2) + '%';
+                retEl.className = 'kpi-value ' + (retVal >= 0 ? 'positive' : 'negative');
+                
+                // Range display
+                document.getElementById('kpi-high-low').innerText = `$${stats.highest.toFixed(2)} / $${stats.lowest.toFixed(2)}`;
+                
+                // Volume display
+                document.getElementById('kpi-volume').innerText = formatVolume(stats.volume);
+                
+                // Clear inspector panel back to placeholder
+                document.getElementById('inspector-placeholder').style.display = 'flex';
+                document.getElementById('inspector-data').style.display = 'none';
+                
+            } catch (err) {
+                console.error(err);
+                errorBanner.innerText = err.message;
+                errorBanner.classList.add('active');
+            } finally {
+                loader.classList.remove('active');
+            }
+        }
+
+        function getIntervalName(code) {
+            const map = {
+                '1m': '1-Minute',
+                '5m': '5-Minute',
+                '15m': '15-Minute',
+                '1h': '1-Hour',
+                '1d': 'Daily',
+                '1wk': 'Weekly',
+                '1mo': 'Monthly'
+            };
+            return map[code] || code;
+        }
+
+        // Initialize display datetime
+        function updateTime() {
+            const display = document.getElementById('current-time-display');
+            const now = new Date();
+            display.innerText = 'Server Time: ' + now.toLocaleTimeString();
+        }
+
+        window.onload = () => {
+            initChart();
+            fetchStockData();
+            updateTime();
+            setInterval(updateTime, 1000);
+        };
+    </script>
+</body>
+</html>
