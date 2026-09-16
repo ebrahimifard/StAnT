@@ -79,9 +79,10 @@ def fetch_stock_history(
             interval=interval,
             start=start or None,
             end=end or None,
+            timeout=10,
         )
 
-    return ticker_obj.history(interval=interval, period="max")
+    return ticker_obj.history(interval=interval, period="max", timeout=10)
 
 
 def get_stock_data(
@@ -98,7 +99,13 @@ def get_stock_data(
 
     for candidate in get_ticker_candidates(ticker):
         tried_symbols.append(candidate)
-        frame = fetch_stock_history(candidate, interval, start, end)
+        try:
+            frame = fetch_stock_history(candidate, interval, start, end)
+        except Exception:
+            # A slow/rate-limited candidate (e.g. a Yahoo exchange-suffix guess
+            # that doesn't exist) shouldn't abort the whole lookup - move on to
+            # the next fallback symbol instead.
+            frame = pd.DataFrame()
         if not frame.empty:
             return ResolvedStockData(
                 frame=frame,
