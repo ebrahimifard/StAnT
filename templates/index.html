@@ -7,7 +7,7 @@
     <!-- Google Fonts: Inter & Space Grotesk -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     
     <!-- TradingView Lightweight Charts CDN -->
     <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
@@ -17,6 +17,7 @@
             --bg-base: #06090e;
             --bg-surface: #0d1117;
             --bg-card: #161b22;
+            --bg-card-hover: #1c2128;
             --border-color: #21262d;
             --border-hover: #30363d;
             --text-primary: #f0f6fc;
@@ -26,9 +27,13 @@
             --accent-cyan: #00f2fe;
             --accent-green: #26a69a;
             --accent-red: #ef5350;
+            --accent-purple: #ab47bc;
+            --accent-amber: #e67e22;
             --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5);
             --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.6);
-            --glow-cyan: 0 0 15px rgba(0, 242, 254, 0.2);
+            --glow-cyan: 0 0 15px rgba(0, 242, 254, 0.25);
+            --glow-green: 0 0 15px rgba(38, 166, 154, 0.3);
+            --glow-red: 0 0 15px rgba(239, 83, 80, 0.3);
         }
 
         * {
@@ -51,7 +56,7 @@
         header {
             background-color: var(--bg-surface);
             border-bottom: 1px solid var(--border-color);
-            padding: 1.2rem 2rem;
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -67,8 +72,8 @@
         }
 
         .logo-icon {
-            width: 32px;
-            height: 32px;
+            width: 34px;
+            height: 34px;
             background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
             border-radius: 8px;
             display: flex;
@@ -77,7 +82,7 @@
             font-weight: 700;
             color: var(--bg-base);
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             box-shadow: var(--glow-cyan);
         }
 
@@ -101,44 +106,73 @@
             border: 1px solid rgba(88, 166, 255, 0.2);
         }
 
-        /* Main Workspace */
+        .nav-mode-tabs {
+            display: flex;
+            background-color: var(--bg-base);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.2rem;
+            gap: 0.2rem;
+        }
+
+        .nav-tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.45rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nav-tab-btn.active {
+            background-color: var(--bg-card);
+            color: var(--accent-cyan);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Main Workspace Layout */
         main {
             flex: 1;
             display: grid;
-            grid-template-columns: 320px 1fr;
+            grid-template-columns: 340px 1fr;
             min-height: calc(100vh - 65px);
+            transition: grid-template-columns 0.3s ease;
         }
 
         /* Sidebar Control Panel */
         .sidebar {
             background-color: var(--bg-surface);
             border-right: 1px solid var(--border-color);
-            padding: 2rem 1.5rem;
+            padding: 1.8rem 1.4rem;
             display: flex;
             flex-direction: column;
-            gap: 1.8rem;
+            gap: 1.6rem;
             overflow-y: auto;
         }
 
         .panel-title {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--text-secondary);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.45rem;
         }
 
         label {
-            font-size: 0.85rem;
-            font-weight: 500;
+            font-size: 0.82rem;
+            font-weight: 600;
             color: var(--text-secondary);
         }
 
@@ -147,8 +181,8 @@
             border: 1px solid var(--border-color);
             border-radius: 8px;
             color: var(--text-primary);
-            padding: 0.75rem 1rem;
-            font-size: 0.95rem;
+            padding: 0.7rem 0.9rem;
+            font-size: 0.9rem;
             outline: none;
             transition: all 0.2s ease-in-out;
             font-family: inherit;
@@ -159,7 +193,6 @@
             box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.15);
         }
 
-        /* Ticker input styling */
         .ticker-input {
             text-transform: uppercase;
             font-weight: 600;
@@ -181,8 +214,8 @@
             color: #fff;
             border: none;
             border-radius: 8px;
-            padding: 0.85rem;
-            font-size: 1rem;
+            padding: 0.8rem;
+            font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -199,35 +232,168 @@
             background: linear-gradient(135deg, #79c0ff, #1f6feb);
         }
 
-        .btn-primary:active {
-            transform: translateY(1px);
+        .btn-secondary {
+            background-color: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--border-color);
+            border-color: var(--border-hover);
         }
 
         /* Dashboard Container */
         .dashboard {
-            padding: 2rem;
+            padding: 1.8rem;
             display: flex;
             flex-direction: column;
-            gap: 2rem;
+            gap: 1.8rem;
             overflow-y: auto;
             background-color: var(--bg-base);
         }
 
-        /* KPI Metric Cards */
+        /* Signal Executive Header Card */
+        .signal-header-card {
+            background: linear-gradient(135deg, rgba(22, 27, 34, 0.9), rgba(13, 17, 23, 0.95));
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem 1.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .signal-header-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-blue));
+        }
+
+        .signal-info-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .signal-ticker-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .signal-badge {
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 0.35rem 0.8rem;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .badge-strong-buy, .badge-buy {
+            background-color: rgba(38, 166, 154, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(38, 166, 154, 0.3);
+            box-shadow: var(--glow-green);
+        }
+
+        .badge-strong-sell, .badge-sell {
+            background-color: rgba(239, 83, 80, 0.15);
+            color: var(--accent-red);
+            border: 1px solid rgba(239, 83, 80, 0.3);
+            box-shadow: var(--glow-red);
+        }
+
+        .badge-hold {
+            background-color: rgba(230, 126, 34, 0.15);
+            color: var(--accent-amber);
+            border: 1px solid rgba(230, 126, 34, 0.3);
+        }
+
+        .signal-subtitle {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+        }
+
+        /* Trade Setup Grid */
+        .trade-setup-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 1rem;
+            flex: 1;
+            max-width: 650px;
+        }
+
+        .setup-box {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 0.75rem 0.9rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .setup-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+        }
+
+        .setup-val {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .setup-sub {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        /* KPI Cards */
         .kpi-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 1.2rem;
         }
 
         .kpi-card {
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 1.5rem;
+            padding: 1.2rem 1.4rem;
             display: flex;
             flex-direction: column;
-            gap: 0.4rem;
+            gap: 0.3rem;
             box-shadow: var(--shadow-sm);
             transition: border-color 0.2s ease, transform 0.2s ease;
         }
@@ -238,7 +404,7 @@
         }
 
         .kpi-label {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 600;
             color: var(--text-secondary);
             text-transform: uppercase;
@@ -247,20 +413,20 @@
 
         .kpi-value {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: var(--text-primary);
         }
 
         .kpi-subtext {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 500;
         }
 
         .positive { color: var(--accent-green) !important; }
         .negative { color: var(--accent-red) !important; }
 
-        /* Chart Canvas & Configuration Card */
+        /* Chart Canvas Card */
         .chart-wrapper {
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -289,7 +455,7 @@
 
         .chart-title {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             font-weight: 700;
         }
 
@@ -298,7 +464,6 @@
             color: var(--text-secondary);
         }
 
-        /* Toggle Switches */
         .toggle-group {
             display: flex;
             background-color: var(--bg-base);
@@ -311,9 +476,9 @@
             background: none;
             border: none;
             color: var(--text-secondary);
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 600;
-            padding: 0.5rem 1rem;
+            padding: 0.45rem 0.9rem;
             border-radius: 6px;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -326,7 +491,6 @@
             box-shadow: var(--shadow-sm);
         }
 
-        /* Chart Rendering Container */
         .chart-container {
             width: 100%;
             height: 480px;
@@ -336,7 +500,7 @@
             background-color: #161b22;
         }
 
-        /* Bottom Row Grid: Inspector + Log info */
+        /* Bottom Row Grid: Indicators + Strategy Breakdown */
         .details-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -346,7 +510,7 @@
         .details-card {
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
+            border-radius: 14px;
             padding: 1.5rem;
             box-shadow: var(--shadow-sm);
             display: flex;
@@ -354,44 +518,506 @@
             gap: 1rem;
         }
 
-        .inspector-placeholder {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            font-style: italic;
+        .strategy-list {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            flex: 1;
-            min-height: 100px;
+            flex-direction: column;
+            gap: 0.6rem;
         }
 
-        .inspector-data {
+        .strategy-item {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: border-color 0.2s ease;
+        }
+
+        .strategy-item:hover {
+            border-color: var(--border-hover);
+        }
+
+        .strat-name {
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+
+        .strat-summary {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .strat-signal-tag {
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+        }
+
+        .indicator-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+
+        .indicator-table th, .indicator-table td {
+            padding: 0.65rem 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .indicator-table th {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .backtest-panel {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .bt-metrics-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 1rem;
         }
 
-        .data-item {
+        .bt-box {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.8rem;
             display: flex;
             flex-direction: column;
             gap: 0.2rem;
-            background-color: var(--bg-surface);
-            padding: 0.6rem 0.8rem;
-            border-radius: 6px;
+        }
+
+        /* Screener View */
+        .screener-container {
+            display: none;
+            padding: 2.2rem;
+            flex-direction: column;
+            gap: 1.8rem;
+            background-color: var(--bg-base);
+            width: 100%;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .screener-container.active {
+            display: flex;
+        }
+
+        .screener-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
             border: 1px solid var(--border-color);
         }
 
-        .data-label {
-            font-size: 0.75rem;
+        .screener-table th, .screener-table td {
+            padding: 0.9rem 1.1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .screener-table th {
+            background-color: var(--bg-surface);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+        }
+
+        .screener-table tr:hover {
+            background-color: var(--bg-card-hover);
+            cursor: pointer;
+        }
+
+        /* Portfolio Builder Suite View */
+        .portfolio-container {
+            display: none;
+            padding: 2.5rem 3rem;
+            flex-direction: column;
+            gap: 2.2rem;
+            background-color: var(--bg-base);
+            width: 100%;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .portfolio-container.active {
+            display: flex;
+        }
+
+        .port-wizard-card {
+            background: linear-gradient(135deg, rgba(13, 17, 23, 0.95), rgba(22, 27, 34, 0.95));
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem 2.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.4rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .port-form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+        }
+
+        /* Portfolio Progress Tracker Box */
+        .port-progress-box {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            box-shadow: var(--shadow-md);
+            margin-top: 0.5rem;
+        }
+
+        .port-progress-track {
+            width: 100%;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .port-progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue), var(--accent-purple));
+            border-radius: 5px;
+            transition: width 0.4s ease;
+            box-shadow: 0 0 12px rgba(0, 242, 254, 0.5);
+        }
+
+        .port-stepper-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 0.8rem;
+            margin-top: 0.4rem;
+        }
+
+        .stepper-item {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            transition: all 0.3s ease;
+        }
+
+        .stepper-item.active {
+            color: var(--accent-cyan);
+            font-weight: 600;
+        }
+
+        .stepper-item.completed {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        .step-icon {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background-color: var(--bg-base);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .stepper-item.completed .step-icon {
+            background-color: rgba(38, 166, 154, 0.2);
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        .stepper-item.active .step-icon {
+            background-color: rgba(0, 242, 254, 0.2);
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        .port-alloc-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--bg-card);
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .port-alloc-table th, .port-alloc-table td {
+            padding: 1rem 1.2rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .port-alloc-table th {
+            background-color: var(--bg-surface);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .weight-progress-bar {
+            height: 6px;
+            background-color: rgba(255,255,255,0.08);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 0.3rem;
+        }
+
+        .weight-progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--accent-cyan), var(--accent-blue));
+            border-radius: 3px;
+        }
+
+        /* Correlation Heatmap Table */
+        .heatmap-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .heatmap-table th, .heatmap-table td {
+            padding: 0.8rem;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .heatmap-table th {
+            background-color: var(--bg-surface);
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        /* Full-Width Interactive Learning Hub View */
+        .learning-container {
+            display: none;
+            padding: 2.5rem 3rem;
+            flex-direction: column;
+            gap: 2.5rem;
+            background-color: var(--bg-base);
+            width: 100%;
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .learning-container.active {
+            display: flex;
+        }
+
+        .learn-hero-banner {
+            background: linear-gradient(135deg, rgba(13, 17, 23, 0.95), rgba(22, 27, 34, 0.95));
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.2rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .learn-hero-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-purple));
+        }
+
+        .learn-hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.4rem;
+        }
+
+        .learn-section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: var(--text-primary);
+        }
+
+        .learn-steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .step-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.6rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            position: relative;
+            box-shadow: var(--shadow-sm);
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .step-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+        }
+
+        .step-number {
+            width: 36px;
+            height: 36px;
+            background-color: rgba(0, 242, 254, 0.12);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Filter Tab Bar for Knowledge Base */
+        .filter-tab-bar {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .filter-chip {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-chip.active, .filter-chip:hover {
+            background-color: rgba(88, 166, 255, 0.12);
+            color: var(--accent-blue);
+            border-color: rgba(88, 166, 255, 0.3);
+        }
+
+        .strat-dict-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.6rem;
+        }
+
+        .dict-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.6rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            box-shadow: var(--shadow-sm);
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .dict-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .dict-card-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .dict-tag {
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
             color: var(--text-secondary);
         }
 
-        .data-value {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 600;
+        .dict-text {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .dict-condition-box {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 0.8rem 1rem;
+            font-size: 0.83rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            line-height: 1.4;
+        }
+
+        /* Risk Handbook Grid */
+        .risk-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
         }
 
         /* Loader Overlay */
@@ -401,7 +1027,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(22, 27, 34, 0.8);
+            background-color: rgba(22, 27, 34, 0.85);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -419,13 +1045,13 @@
         }
 
         .spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid rgba(88, 166, 255, 0.1);
-            border-top: 3px solid var(--accent-blue);
+            width: 45px;
+            height: 45px;
+            border: 3px solid rgba(88, 166, 255, 0.15);
+            border-top: 3px solid var(--accent-cyan);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1rem;
+            animation: spin 0.9s linear infinite;
+            margin-bottom: 0.8rem;
         }
 
         @keyframes spin {
@@ -434,70 +1060,50 @@
         }
 
         .loader-text {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: var(--text-secondary);
             font-weight: 500;
         }
 
-        /* Error Banner */
         .error-banner {
             display: none;
-            background-color: rgba(239, 83, 80, 0.1);
-            border: 1px solid rgba(239, 83, 80, 0.3);
+            background-color: rgba(239, 83, 80, 0.12);
+            border: 1px solid rgba(239, 83, 80, 0.35);
             color: #ff8080;
-            padding: 1rem 1.25rem;
+            padding: 0.9rem 1.2rem;
             border-radius: 8px;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             line-height: 1.5;
-            margin-bottom: 1.5rem;
         }
 
         .error-banner.active {
             display: block;
         }
 
-        /* Footer */
         footer {
             background-color: var(--bg-surface);
             border-top: 1px solid var(--border-color);
-            padding: 1.2rem;
+            padding: 1rem;
             text-align: center;
             font-size: 0.8rem;
             color: var(--text-secondary);
             margin-top: auto;
         }
 
-        /* Custom Scrollbars */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-base); }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
+
+        @media (max-width: 1200px) {
+            .strat-dict-grid { grid-template-columns: repeat(2, 1fr); }
+            .learn-steps-grid, .risk-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
-        ::-webkit-scrollbar-track {
-            background: var(--bg-base);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--border-hover);
-        }
-
-        /* Responsiveness */
-        @media (max-width: 1024px) {
-            main {
-                grid-template-columns: 1fr;
-            }
-            .sidebar {
-                border-right: none;
-                border-bottom: 1px solid var(--border-color);
-            }
-            .details-grid {
-                grid-template-columns: 1fr;
-            }
+        @media (max-width: 900px) {
+            main { grid-template-columns: 1fr !important; }
+            .sidebar { border-right: none; border-bottom: 1px solid var(--border-color); }
+            .details-grid, .strat-dict-grid, .learn-steps-grid, .risk-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -510,25 +1116,52 @@
             <div class="logo-text">{{ app_name }}</div>
             <div class="header-tag">{{ app_description }}</div>
         </div>
-        <div style="font-size: 0.85rem; color: var(--text-secondary);" id="current-time-display">
+
+        <div class="nav-mode-tabs">
+            <button class="nav-tab-btn active" id="tab-single-btn" onclick="switchViewMode('chart')">Single Stock Chart</button>
+            <button class="nav-tab-btn" id="tab-screener-btn" onclick="switchViewMode('screener')">Multi-Stock Screener</button>
+            <button class="nav-tab-btn" id="tab-portfolio-btn" onclick="switchViewMode('portfolio')">💼 Portfolio Builder</button>
+            <button class="nav-tab-btn" id="tab-learning-btn" onclick="switchViewMode('learning')">📚 Learning & Hub</button>
+        </div>
+
+        <div style="font-size: 0.82rem; color: var(--text-secondary);" id="current-time-display">
             StAnT loaded
         </div>
     </header>
 
     <!-- App Body -->
-    <main>
+    <main id="main-layout">
         <!-- Sidebar Control Panel -->
-        <section class="sidebar">
+        <section class="sidebar" id="sidebar-panel">
             <div>
-                <h3 class="panel-title">Data Parameters</h3>
+                <h3 class="panel-title">Data & Strategy Controls</h3>
             </div>
             
             <form id="parameters-form" onsubmit="event.preventDefault(); fetchStockData();">
-                <div style="display: flex; flex-direction: column; gap: 1.2rem;">
+                <div style="display: flex; flex-direction: column; gap: 1.1rem;">
                     <!-- Ticker Input -->
                     <div class="form-group">
-                        <label for="ticker-input">Ticker Symbol</label>
-                        <input type="text" id="ticker-input" class="ticker-input" placeholder="e.g. AAPL, VUSA, VUSA.L" required value="AAPL">
+                        <label for="ticker-input">Stock Ticker Symbol</label>
+                        <input type="text" id="ticker-input" class="ticker-input" placeholder="e.g. AAPL, MSFT, TSLA, VUSA.L" required value="AAPL">
+                    </div>
+
+                    <!-- Trading Strategy Selector -->
+                    <div class="form-group">
+                        <label for="strategy-select">Trading Strategy Model</label>
+                        <select id="strategy-select" onchange="fetchStockData()">
+                            <option value="ensemble" selected>✨ Multi-Factor Ensemble Consensus</option>
+                            <option value="sma_cross">📈 SMA 50/200 Golden & Death Cross</option>
+                            <option value="rsi_reversion">📊 RSI Mean Reversion (14-period)</option>
+                            <option value="macd_cross">⚡ MACD Signal Line Crossover</option>
+                            <option value="bollinger">🌊 Bollinger Bands Reversion & Squeeze</option>
+                            <option value="stochastic">🎯 Stochastic %K/%D Momentum</option>
+                            <option value="supertrend">🚀 Supertrend & ADX Trend Following</option>
+                            <option value="ichimoku">⛩️ Ichimoku Kinko Hyo Cloud Breakout</option>
+                            <option value="keltner_squeeze">💎 Keltner Channel Volatility Compression</option>
+                            <option value="parabolic_sar">📍 Parabolic SAR Trailing Reversal</option>
+                            <option value="vwap_profile">📊 Session VWAP Band Profile Reversion</option>
+                            <option value="ml_quant">🤖 Machine Learning Directional Scoring</option>
+                        </select>
                     </div>
 
                     <!-- Interval Dropdown -->
@@ -557,124 +1190,565 @@
                     </div>
 
                     <div class="info-note" id="limits-disclaimer">
-                        Yahoo Finance daily data (`1d`) supports the entire historical range. Date filters are optional.
+                        Yahoo Finance daily data (`1d`) supports the entire historical range.
                     </div>
 
                     <!-- Submit Button -->
                     <button type="submit" class="btn-primary" id="submit-btn">
-                        <span>Analyze Ticker</span>
+                        <span>Analyze & Generate Signals</span>
+                    </button>
+
+                    <button type="button" class="btn-secondary" onclick="runBacktest()">
+                        <span>📈 Run Strategy Backtest</span>
                     </button>
                 </div>
             </form>
         </section>
 
-        <!-- Dashboard Panel -->
-        <section class="dashboard">
-            <!-- Error Banner -->
+        <!-- Main Dashboard View -->
+        <section class="dashboard" id="view-dashboard">
             <div class="error-banner" id="error-banner"></div>
 
-            <!-- KPIs -->
+            <!-- Signal Executive Summary Header Card -->
+            <div class="signal-header-card" id="signal-header-card">
+                <div class="signal-info-group">
+                    <div class="signal-ticker-title">
+                        <span id="header-ticker-name">AAPL</span>
+                        <span class="signal-badge badge-strong-buy" id="header-signal-badge">STRONG BUY</span>
+                    </div>
+                    <div class="signal-subtitle" id="header-signal-summary">
+                        Consensus Score: +85.0% across 11 Strategy Models
+                    </div>
+                </div>
+
+                <div class="trade-setup-grid">
+                    <div class="setup-box">
+                        <span class="setup-label">Entry Price</span>
+                        <span class="setup-val" id="setup-entry">$—</span>
+                        <span class="setup-sub">Market order</span>
+                    </div>
+                    <div class="setup-box">
+                        <span class="setup-label">Stop-Loss</span>
+                        <span class="setup-val negative" id="setup-stop">$—</span>
+                        <span class="setup-sub" id="setup-risk-sub">ATR Volatility</span>
+                    </div>
+                    <div class="setup-box">
+                        <span class="setup-label">Target 1</span>
+                        <span class="setup-val positive" id="setup-target1">$—</span>
+                        <span class="setup-sub" id="setup-reward-sub">Reward 1:2</span>
+                    </div>
+                    <div class="setup-box">
+                        <span class="setup-label">Target 2</span>
+                        <span class="setup-val positive" id="setup-target2">$—</span>
+                        <span class="setup-sub">Reward 1:3</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KPIs Container -->
             <div class="kpi-container">
-                <!-- Last Close KPI -->
                 <div class="kpi-card">
                     <span class="kpi-label">Last Price</span>
                     <span class="kpi-value" id="kpi-last-close">—</span>
                     <span class="kpi-subtext" id="kpi-last-time">Select a ticker to load</span>
                 </div>
 
-                <!-- Total Return KPI -->
                 <div class="kpi-card">
-                    <span class="kpi-label">Return (Period)</span>
+                    <span class="kpi-label">Period Return</span>
                     <span class="kpi-value" id="kpi-return">—</span>
                     <span class="kpi-subtext" id="kpi-return-sub">From start to end</span>
                 </div>
 
-                <!-- High/Low KPI -->
                 <div class="kpi-card">
                     <span class="kpi-label">Range High / Low</span>
-                    <span class="kpi-value" style="font-size: 1.3rem;" id="kpi-high-low">—</span>
-                    <span class="kpi-subtext" id="kpi-high-low-sub">Min and max prices</span>
+                    <span class="kpi-value" style="font-size: 1.25rem;" id="kpi-high-low">—</span>
+                    <span class="kpi-subtext" id="kpi-high-low-sub">Min & max price</span>
                 </div>
 
-                <!-- Volume KPI -->
                 <div class="kpi-card">
-                    <span class="kpi-label">Volume (Period)</span>
-                    <span class="kpi-value" style="font-size: 1.4rem;" id="kpi-volume">—</span>
-                    <span class="kpi-subtext" id="kpi-volume-sub">Cumulative trades</span>
+                    <span class="kpi-label">Cumulative Volume</span>
+                    <span class="kpi-value" style="font-size: 1.35rem;" id="kpi-volume">—</span>
+                    <span class="kpi-subtext" id="kpi-volume-sub">Total trades</span>
                 </div>
             </div>
 
-            <!-- Chart Card -->
+            <!-- Interactive Chart Card -->
             <div class="chart-wrapper">
-                <!-- Loader Overlay -->
                 <div class="loader-overlay" id="loader-overlay">
                     <div class="spinner"></div>
-                    <div class="loader-text" id="loader-text">Fetching data...</div>
+                    <div class="loader-text" id="loader-text">Analyzing market data & evaluating signals...</div>
                 </div>
 
                 <div class="chart-header">
                     <div class="chart-title-group">
                         <span class="chart-title" id="chart-main-title">AAPL Interactive Chart</span>
-                        <span class="chart-subtitle" id="chart-sub-title">Daily candles, full available history</span>
+                        <span class="chart-subtitle" id="chart-sub-title">Daily candles with Buy ▲ / Sell ▼ Strategy Overlay</span>
                     </div>
 
-                    <!-- Chart Style Toggles -->
                     <div class="toggle-group">
                         <button class="toggle-btn active" id="btn-candlestick" onclick="setChartType('candlestick')">Candles</button>
                         <button class="toggle-btn" id="btn-line" onclick="setChartType('line')">Line</button>
                     </div>
                 </div>
 
-                <!-- Chart Div Target -->
                 <div class="chart-container" id="chart-container"></div>
             </div>
 
-            <!-- Bottom Detail Panel -->
-            <div class="details-grid">
-                <!-- Point Inspector Panel -->
-                <div class="details-card">
-                    <h3 class="panel-title" style="margin-bottom: 0.5rem;">Price Inspector</h3>
-                    
-                    <div class="inspector-placeholder" id="inspector-placeholder">
-                        Click on any price candle or point in the chart to inspect details
+            <!-- Historical Backtesting Results Card -->
+            <div class="backtest-panel" id="backtest-panel" style="display: none;">
+                <h3 class="panel-title" style="margin-bottom: 0.2rem;">📈 Historical Strategy Backtest Results</h3>
+                <div style="font-size: 0.85rem; color: var(--text-secondary);" id="bt-subtitle">
+                    Simulation of <strong id="bt-strat-name">Ensemble Model</strong> on full historical dataset ($10,000 initial capital).
+                </div>
+
+                <div class="bt-metrics-grid">
+                    <div class="bt-box">
+                        <span class="setup-label">Strategy Return</span>
+                        <span class="setup-val" id="bt-strat-return">—</span>
                     </div>
-                    
-                    <div class="inspector-data" id="inspector-data" style="display: none;">
-                        <div class="data-item">
-                            <span class="data-label">Selected Date / Time</span>
-                            <span class="data-value" id="inspect-time">—</span>
+                    <div class="bt-box">
+                        <span class="setup-label">Buy & Hold Return</span>
+                        <span class="setup-val" id="bt-buyhold-return">—</span>
+                    </div>
+                    <div class="bt-box">
+                        <span class="setup-label">Win Rate</span>
+                        <span class="setup-val positive" id="bt-winrate">—</span>
+                    </div>
+                    <div class="bt-box">
+                        <span class="setup-label">Total Trades</span>
+                        <span class="setup-val" id="bt-trades">—</span>
+                    </div>
+                    <div class="bt-box">
+                        <span class="setup-label">Profit Factor</span>
+                        <span class="setup-val" id="bt-profit-factor">—</span>
+                    </div>
+                    <div class="bt-box">
+                        <span class="setup-label">Max Drawdown</span>
+                        <span class="setup-val negative" id="bt-max-drawdown">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Detail Grid: Indicator Table + Strategy Breakdown -->
+            <div class="details-grid">
+                <div class="details-card">
+                    <h3 class="panel-title">Strategy Models Breakdown</h3>
+                    <div class="strategy-list" id="sub-strategies-list"></div>
+                </div>
+
+                <div class="details-card">
+                    <h3 class="panel-title">Technical Indicators Table</h3>
+                    <table class="indicator-table">
+                        <thead>
+                            <tr>
+                                <th>Indicator</th>
+                                <th>Value</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="indicators-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Multi-Stock Screener View -->
+        <section class="screener-container" id="view-screener">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h2 class="panel-title" style="font-size: 1.3rem;">🔍 Multi-Stock Batch Screener</h2>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">Evaluate signals and risk targets across multiple stock tickers simultaneously.</p>
+                </div>
+
+                <div style="display: flex; gap: 0.8rem; align-items: center;">
+                    <input type="text" id="screener-tickers-input" style="width: 320px;" placeholder="e.g. AAPL, MSFT, TSLA, NVDA, GOOGL, AMZN, SPY" value="AAPL, MSFT, TSLA, NVDA, GOOGL, AMZN, SPY">
+                    <button type="button" class="btn-primary" onclick="runScreener()">Screen Stocks</button>
+                </div>
+            </div>
+
+            <table class="screener-table">
+                <thead>
+                    <tr>
+                        <th>Ticker</th>
+                        <th>Price</th>
+                        <th>Change %</th>
+                        <th>Signal</th>
+                        <th>Score</th>
+                        <th>Stop-Loss</th>
+                        <th>Target 1</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="screener-table-body"></tbody>
+            </table>
+        </section>
+
+        <!-- Portfolio Builder & Risk Optimizer View -->
+        <section class="portfolio-container" id="view-portfolio">
+            <!-- Portfolio Wizard Questionnaire Header -->
+            <div class="port-wizard-card">
+                <div>
+                    <h2 class="learn-section-title" style="font-size: 1.6rem;">💼 Institutional Portfolio Optimization Suite</h2>
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+                        Specify your investment criteria, capital, and risk profile to build an optimal portfolio using Modern Portfolio Theory, Risk Parity, or Black-Litterman Quant Alpha algorithms.
+                    </p>
+                </div>
+
+                <form id="portfolio-form" onsubmit="event.preventDefault(); runPortfolioBuilder();">
+                    <div class="port-form-grid">
+                        <!-- Goal -->
+                        <div class="form-group">
+                            <label for="port-goal-select">Investment Goal</label>
+                            <select id="port-goal-select">
+                                <option value="growth" selected>📈 Capital Growth & Appreciation</option>
+                                <option value="income">💵 Income & Dividend Stability</option>
+                                <option value="balanced">⚖️ Balanced Growth & Income</option>
+                                <option value="preservation">🛡️ Risk Mitigation & Preservation</option>
+                                <option value="high_beta">🚀 High-Beta Aggressive Alpha</option>
+                            </select>
                         </div>
-                        <div class="data-item">
-                            <span class="data-label">Open Price</span>
-                            <span class="data-value" id="inspect-open">—</span>
+
+                        <!-- Risk Tolerance -->
+                        <div class="form-group">
+                            <label for="port-risk-select">Risk Tolerance Profile</label>
+                            <select id="port-risk-select">
+                                <option value="conservative">🛡️ Conservative (Low Volatility)</option>
+                                <option value="moderate" selected>⚖️ Moderate (Balanced Risk)</option>
+                                <option value="aggressive">🚀 Aggressive (High Growth)</option>
+                                <option value="speculative">🔥 Speculative (Max Alpha)</option>
+                            </select>
                         </div>
-                        <div class="data-item">
-                            <span class="data-label">High Price</span>
-                            <span class="data-value" id="inspect-high">—</span>
+
+                        <!-- Optimization Model -->
+                        <div class="form-group">
+                            <label for="port-model-select">Portfolio Model Technique</label>
+                            <select id="port-model-select">
+                                <option value="max_sharpe" selected>🏆 Markowitz MPT (Max Sharpe Ratio)</option>
+                                <option value="risk_parity">⚖️ Equal Risk Contribution (Risk Parity)</option>
+                                <option value="black_litterman">🚀 Black-Litterman & Quant Strategy Alpha</option>
+                                <option value="min_variance">🛡️ Minimum Variance (Capital Preservation)</option>
+                                <option value="max_div">🌐 Maximum Diversification Ratio</option>
+                            </select>
                         </div>
-                        <div class="data-item">
-                            <span class="data-label">Low Price</span>
-                            <span class="data-value" id="inspect-low">—</span>
+
+                        <!-- Capital -->
+                        <div class="form-group">
+                            <label for="port-capital-input">Investment Amount ($)</label>
+                            <input type="number" id="port-capital-input" value="10000" min="1000" step="1000">
                         </div>
-                        <div class="data-item">
-                            <span class="data-label">Close Price</span>
-                            <span class="data-value" id="inspect-close">—</span>
+
+                        <!-- Stock Universe -->
+                        <div class="form-group" style="grid-column: span 2;">
+                            <label for="port-tickers-input">Stock Universe Tickers (Comma Separated)</label>
+                            <input type="text" id="port-tickers-input" class="ticker-input" value="AAPL, MSFT, NVDA, TSLA, GOOGL, AMZN, SPY">
                         </div>
-                        <div class="data-item">
-                            <span class="data-label">Trading Volume</span>
-                            <span class="data-value" id="inspect-volume">—</span>
-                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
+                        <button type="submit" class="btn-primary" style="padding: 0.8rem 2rem;" id="port-submit-btn">
+                            <span>🚀 Generate Optimized Portfolio</span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Live Animated Progress Tracker Box -->
+                <div class="port-progress-box" id="port-progress-box" style="display: none;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+                        <span style="font-size: 0.95rem; font-weight: 700; color: var(--accent-cyan);" id="port-progress-status">🚀 Initializing Portfolio Engine...</span>
+                        <span style="font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text-primary);" id="port-progress-pct">0%</span>
+                    </div>
+
+                    <!-- Glowing Progress Bar Track -->
+                    <div class="port-progress-track">
+                        <div class="port-progress-bar-fill" id="port-progress-fill"></div>
+                    </div>
+
+                    <!-- Stepper Checklist -->
+                    <div class="port-stepper-grid">
+                        <div class="stepper-item" id="pstep-1"><span class="step-icon">1</span> Connect Yahoo Finance</div>
+                        <div class="stepper-item" id="pstep-2"><span class="step-icon">2</span> Download OHLCV Data</div>
+                        <div class="stepper-item" id="pstep-3"><span class="step-icon">3</span> Covariance & Strategy Scores</div>
+                        <div class="stepper-item" id="pstep-4"><span class="step-icon">4</span> Solve Portfolio Optimization</div>
+                        <div class="stepper-item" id="pstep-5"><span class="step-icon">5</span> Generate Orders & VaR Metrics</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Portfolio Risk & Return Metrics Cards -->
+            <div class="kpi-container" id="port-metrics-grid" style="display: none;">
+                <div class="kpi-card">
+                    <span class="kpi-label">Expected Return</span>
+                    <span class="kpi-value positive" id="port-exp-return">+0.00%</span>
+                    <span class="kpi-subtext">Annualized projection</span>
+                </div>
+
+                <div class="kpi-card">
+                    <span class="kpi-label">Annual Volatility</span>
+                    <span class="kpi-value" id="port-volatility">0.00%</span>
+                    <span class="kpi-subtext">Portfolio risk ($\sigma$)</span>
+                </div>
+
+                <div class="kpi-card">
+                    <span class="kpi-label">Sharpe Ratio</span>
+                    <span class="kpi-value positive" id="port-sharpe">0.00</span>
+                    <span class="kpi-subtext">Risk-adjusted return</span>
+                </div>
+
+                <div class="kpi-card">
+                    <span class="kpi-label">Sortino Ratio</span>
+                    <span class="kpi-value positive" id="port-sortino">0.00</span>
+                    <span class="kpi-subtext">Downside risk ratio</span>
+                </div>
+
+                <div class="kpi-card">
+                    <span class="kpi-label">Value at Risk (95%)</span>
+                    <span class="kpi-value negative" id="port-var-daily">$0.00</span>
+                    <span class="kpi-subtext" id="port-var-monthly">Monthly VaR: $0.00</span>
+                </div>
+
+                <div class="kpi-card">
+                    <span class="kpi-label">Max Drawdown</span>
+                    <span class="kpi-value negative" id="port-drawdown">-0.00%</span>
+                    <span class="kpi-subtext">Peak to trough</span>
+                </div>
+            </div>
+
+            <!-- Asset Allocation & Actionable Share Orders Table -->
+            <div class="details-card" id="port-allocations-card" style="display: none;">
+                <h3 class="panel-title">📊 Optimal Asset Allocations & Actionable Share Orders</h3>
+                <table class="port-alloc-table">
+                    <thead>
+                        <tr>
+                            <th>Ticker</th>
+                            <th>Target Weight</th>
+                            <th>Investment ($)</th>
+                            <th>Shares to Buy</th>
+                            <th>Current Price</th>
+                            <th>Quant Signal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="port-alloc-tbody"></tbody>
+                </table>
+            </div>
+
+            <!-- Asset Correlation Heatmap -->
+            <div class="details-card" id="port-heatmap-card" style="display: none;">
+                <h3 class="panel-title">🌐 Asset Correlation & Risk Diversification Matrix</h3>
+                <div style="overflow-x: auto;">
+                    <table class="heatmap-table" id="port-heatmap-table"></table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Full-Width Interactive Learning & Quantitative Strategy Hub View -->
+        <section class="learning-container" id="view-learning">
+            <!-- Hero Banner -->
+            <div class="learn-hero-banner">
+                <div>
+                    <h1 class="learn-hero-title">📚 Quantitative Strategy & Learning Center</h1>
+                    <p style="font-size: 0.95rem; color: var(--text-secondary); max-width: 800px; line-height: 1.6;">
+                        Master how StAnT works, explore 11 state-of-the-art quantitative trading models, understand technical indicator calculations, and learn institutional risk management.
+                    </p>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <div style="background-color: rgba(0,242,254,0.1); border:1px solid rgba(0,242,254,0.25); padding:0.8rem 1.2rem; border-radius:12px; text-align:center;">
+                        <span style="font-family:'Space Grotesk'; font-size:1.6rem; font-weight:700; color:var(--accent-cyan);">11</span>
+                        <div style="font-size:0.75rem; color:var(--text-secondary); text-transform:uppercase;">Strategy Models</div>
+                    </div>
+                    <div style="background-color: rgba(171,71,188,0.1); border:1px solid rgba(171,71,188,0.25); padding:0.8rem 1.2rem; border-radius:12px; text-align:center;">
+                        <span style="font-family:'Space Grotesk'; font-size:1.6rem; font-weight:700; color:var(--accent-purple);">100%</span>
+                        <div style="font-size:0.75rem; color:var(--text-secondary); text-transform:uppercase;">Vectorised Engine</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Getting Started 4-Step Walkthrough Grid -->
+            <div>
+                <h3 class="learn-section-title">🚀 How to Use StAnT (4-Step Workflow)</h3>
+                <div class="learn-steps-grid" style="margin-top: 1rem;">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h4 style="font-size: 1rem; font-weight: 700;">Select Ticker & Resolution</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">Enter any stock ticker (e.g. `AAPL`, `TSLA`, `VUSA.L`). Choose resolutions from 1-minute intraday up to daily, weekly, or monthly candles.</p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h4 style="font-size: 1rem; font-weight: 700;">Choose Strategy Model</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">Pick from 11 quantitative models (Ichimoku Cloud, Keltner Squeeze, Parabolic SAR, ML Scoring) or select the Multi-Factor Ensemble Consensus Model.</p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h4 style="font-size: 1rem; font-weight: 700;">Analyze Signals & Markers</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">View real-time Buy ▲ (green) and Sell ▼ (red) marker arrows directly on the interactive price chart at exact signal execution dates.</p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <h4 style="font-size: 1rem; font-weight: 700;">Execute Setup & Backtest</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">Inspect entry prices, ATR-based stop-loss levels, 1:2 / 1:3 take-profit targets, and evaluate historical strategy win rates with the Backtester.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quantitative Strategy Knowledge Base & Dictionary -->
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                    <h3 class="learn-section-title">🧠 Strategy Knowledge Base & Dictionary</h3>
+
+                    <!-- Filter Chips -->
+                    <div class="filter-tab-bar">
+                        <button class="filter-chip active" onclick="filterDictCards('all', this)">All (11 Strategies)</button>
+                        <button class="filter-chip" onclick="filterDictCards('trend', this)">Trend Following</button>
+                        <button class="filter-chip" onclick="filterDictCards('oscillator', this)">Oscillators & Reversion</button>
+                        <button class="filter-chip" onclick="filterDictCards('volatility', this)">Volatility & Squeeze</button>
+                        <button class="filter-chip" onclick="filterDictCards('ml', this)">Institutional & ML</button>
                     </div>
                 </div>
 
-                <!-- Guidelines Card -->
-                <div class="details-card">
-                    <h3 class="panel-title">Interactive Guide</h3>
-                    <div style="font-size: 0.9rem; line-height: 1.6; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.8rem;">
-                        <p>💡 <strong>Zoom:</strong> Hover over the chart and use your <strong>mouse scroll wheel</strong> or pinch on a trackpad to zoom in/out.</p>
-                        <p>👈 <strong>Pan:</strong> Click and <strong>drag</strong> the chart horizontally to move across time.</p>
-                        <p>🖱️ <strong>Inspect:</strong> Hovering displays a precise crosshair. <strong>Clicking</strong> will lock that candle's details inside the Price Inspector panel on the left.</p>
-                        <p>🔄 <strong>Reset view:</strong> To reset the zoom/panning to fit the full dataset, double click anywhere on the chart.</p>
+                <div class="strat-dict-grid" style="margin-top: 1.2rem;">
+                    <!-- Ensemble -->
+                    <div class="dict-card" data-cat="ml">
+                        <div class="dict-card-title">
+                            <span>✨ Multi-Factor Ensemble Consensus</span>
+                            <span class="dict-tag">Institutional Aggregator</span>
+                        </div>
+                        <p class="dict-text">Combines signals from all 11 quantitative models using weighted conviction scoring (-100% to +100%). Prevents false signals by requiring cross-strategy consensus across trend, momentum, volatility, and volume features.</p>
+                        <div class="dict-condition-box">
+                            <div><strong style="color:var(--accent-green)">Bullish Trigger:</strong> Consensus score >= +20% (Strong Buy >= +55%)</div>
+                            <div><strong style="color:var(--accent-red)">Bearish Trigger:</strong> Consensus score <= -20% (Strong Sell <= -55%)</div>
+                        </div>
+                    </div>
+
+                    <!-- Ichimoku Cloud -->
+                    <div class="dict-card" data-cat="trend">
+                        <div class="dict-card-title">
+                            <span>⛩️ Ichimoku Kinko Hyo Cloud Breakout</span>
+                            <span class="dict-tag">Trend & Volatility</span>
+                        </div>
+                        <p class="dict-text">Evaluates 5 Japanese components: Tenkan-sen (9-period), Kijun-sen (26-period), Senkou Span A & B (Kumo Cloud), and Chikou Span. Identifies clear macro trend direction, momentum, and dynamic support/resistance zones.</p>
+                        <div class="dict-condition-box">
+                            <div><strong style="color:var(--accent-green)">Bullish Trigger:</strong> Price breaks above Kumo Cloud & Tenkan crosses above Kijun</div>
+                            <div><strong style="color:var(--accent-red)">Bearish Trigger:</strong> Price falls below Kumo Cloud & Tenkan crosses below Kijun</div>
+                        </div>
+                    </div>
+
+                    <!-- Machine Learning Scoring -->
+                    <div class="dict-card" data-cat="ml">
+                        <div class="dict-card-title">
+                            <span>🤖 ML Directional Scoring Model</span>
+                            <span class="dict-tag">Predictive Quant</span>
+                        </div>
+                        <p class="dict-text">Evaluates a multi-feature vector space including Money Flow Index (MFI), RSI slope, MACD velocity, Bollinger %B, and ADX trend strength to compute a predictive bullish probability score (0% to 100%).</p>
+                        <div class="dict-condition-box">
+                            <div><strong style="color:var(--accent-green)">Bullish Trigger:</strong> Bullish Probability score >= 67.5%</div>
+                            <div><strong style="color:var(--accent-red)">Bearish Trigger:</strong> Bullish Probability score <= 32.5%</div>
+                        </div>
+                    </div>
+
+                    <!-- Keltner Squeeze -->
+                    <div class="dict-card" data-cat="volatility">
+                        <div class="dict-card-title">
+                            <span>💎 Keltner Volatility Compression</span>
+                            <span class="dict-tag">Breakout & Squeeze</span>
+                        </div>
+                        <p class="dict-text">Compares Bollinger Bands against ATR-based Keltner Channels to detect low-volatility consolidation squeezes prior to explosive directional breakout moves.</p>
+                        <div class="dict-condition-box">
+                            <div><strong style="color:var(--accent-green)">Bullish Trigger:</strong> Price breaks above Upper Keltner Channel post-squeeze</div>
+                            <div><strong style="color:var(--accent-red)">Bearish Trigger:</strong> Price breaks below Lower Keltner Channel post-squeeze</div>
+                        </div>
+                    </div>
+
+                    <!-- Parabolic SAR -->
+                    <div class="dict-card" data-cat="trend">
+                        <div class="dict-card-title">
+                            <span>📍 Parabolic SAR Trailing Reversal</span>
+                            <span class="dict-tag">Trailing Stop Reversal</span>
+                        </div>
+                        <p class="dict-text">Uses an accelerating step factor (0.02 - 0.20) to plot dynamic trailing stop dots that follow price trends and flip positions instantly when trend direction shifts.</p>
+                        <div class="dict-condition-box">
+                            <div><strong style="color:var(--accent-green)">Bullish Trigger:</strong> Price crosses above SAR dot (dots flip below price)</div>
+                            <div><strong style="color:var(--accent-red)">Bearish Trigger:</strong> Price crosses below SAR dot (dots flip above price)</div>
+                        </div>
+                    </div>
+
+                    <!-- VWAP Profile -->
+                    <div class="dict-card" data-cat="oscillator">
+                        <div class="dict-card-title">
+                            <span>📊 Session VWAP Band Reversion</span>
+                            <span class="dict-tag">Order Flow Profile</span>
+                        </div>
+                        <p class="dict-text">Tracks Volume-Weighted Average Price along with standard deviation volatility bands to identify institutional fair value and overextended mean-reversion opportunities.</p>
+                        <div class="dict-condition-box">
+                            <div><strong style="color:var(--accent-green)">Bullish Trigger:</strong> Price dips below Lower VWAP Band (-1 Std Dev) & rebounds</div>
+                            <div><strong style="color:var(--accent-red)">Bearish Trigger:</strong> Price surges above Upper VWAP Band (+1 Std Dev) & rejects</div>
+                        </div>
+                    </div>
+
+                    <!-- Supertrend -->
+                    <div class="dict-card" data-cat="trend">
+                        <div class="dict-card-title">
+                            <span>🚀 Supertrend & ADX Trend Following</span>
+                            <span class="dict-tag">Trend Following</span>
+                        </div>
+                        <p class="dict-text">Combines ATR volatility trailing stop line with ADX trend strength filter (>25) to ride strong trending moves while exiting rapidly on trend exhaustion.</p>
+                        <div class="dict-condition-box">
+                            <div><strong style="color:var(--accent-green)">Bullish Trigger:</strong> Price crosses above Supertrend line with ADX > 25</div>
+                            <div><strong style="color:var(--accent-red)">Bearish Trigger:</strong> Price crosses below Supertrend line</div>
+                        </div>
+                    </div>
+
+                    <!-- SMA Cross -->
+                    <div class="dict-card" data-cat="trend">
+                        <div class="dict-card-title">
+                            <span>📈 SMA 50/200 Golden & Death Cross</span>
+                            <span class="dict-tag">Macro Trend</span>
+                        </div>
+                        <p class="dict-text">Identifies major long-term institutional bull and bear market regime shifts using 50-day and 200-day Simple Moving Average crossovers.</p>
+                        <div class="dict-condition-box">
+                            <div><strong style="color:var(--accent-green)">Golden Cross:</strong> 50 SMA crosses above 200 SMA</div>
+                            <div><strong style="color:var(--accent-red)">Death Cross:</strong> 50 SMA crosses below 200 SMA</div>
+                        </div>
+                    </div>
+
+                    <!-- RSI Reversion -->
+                    <div class="dict-card" data-cat="oscillator">
+                        <div class="dict-card-title">
+                            <span>📊 RSI Mean Reversion (14-period)</span>
+                            <span class="dict-tag">Momentum Oscillator</span>
+                        </div>
+                        <p class="dict-text">Measures speed and change of price movements between 0 and 100 to spot extreme oversold conditions for long entries or overbought levels for short exits.</p>
+                        <div class="dict-condition-box">
+                            <div><strong style="color:var(--accent-green)">Oversold Buy:</strong> RSI < 30 and turning upward</div>
+                            <div><strong style="color:var(--accent-red)">Overbought Sell:</strong> RSI > 70 and turning downward</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Risk Management & Metrics Handbook -->
+            <div>
+                <h3 class="learn-section-title">🛡️ Risk Management & Metrics Handbook</h3>
+                <div class="risk-grid" style="margin-top: 1rem;">
+                    <div class="step-card">
+                        <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--accent-amber);">ATR Stop-Loss Level</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">Calculated dynamically using 1.5x Average True Range (ATR). Prevents getting stopped out by random market noise while protecting capital during adverse moves.</p>
+                    </div>
+
+                    <div class="step-card">
+                        <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--accent-green);">Take-Profit Targets (1:2 & 1:3)</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">Target 1 secures profit at 2x your risk amount. Target 2 captures extended trend moves at 3x risk. Ensures positive expectancy over time.</p>
+                    </div>
+
+                    <div class="step-card">
+                        <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--accent-blue);">Win Rate (%) & Profit Factor</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">Win Rate is the percentage of winning trades. Profit Factor is Gross Profits / Gross Losses. A Profit Factor > 1.5 indicates an institutional-grade edge.</p>
+                    </div>
+
+                    <div class="step-card">
+                        <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--accent-red);">Maximum Drawdown (%)</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">Measures the largest peak-to-trough decline in portfolio equity during the backtest period. Keeps downside exposure within acceptable limits.</p>
                     </div>
                 </div>
             </div>
@@ -683,10 +1757,10 @@
 
     <!-- Footer -->
     <footer>
-        &copy; 2026 StAnT. Built with Python Flask & TradingView Lightweight Charts.
+        &copy; 2026 StAnT. Built with Python Flask, TradingView Lightweight Charts & Institutional Quantitative Engine.
     </footer>
 
-    <!-- App JS Logic -->
+    <!-- JS Logic -->
     <script>
         let chart = null;
         let candlestickSeries = null;
@@ -695,9 +1769,8 @@
         
         let loadedChartData = [];
         let loadedVolumeData = [];
-        let currentChartType = 'candlestick'; // candlestick or line
+        let currentChartType = 'candlestick';
 
-        // Handle interval information text
         function handleIntervalChange() {
             const select = document.getElementById('interval-select');
             const value = select.value;
@@ -711,20 +1784,17 @@
             } else if (value === '1h') {
                 message = '⚠️ 1-hour data has a historical limit of the last 730 days (2 years).';
             } else {
-                message = 'Yahoo Finance daily or longer interval data (`' + value + '`) supports the entire historical range. Date filters are optional.';
+                message = 'Yahoo Finance daily data (`' + value + '`) supports the entire historical range.';
             }
             disclaimer.innerHTML = message;
         }
 
-        // Initialize the TradingView Lightweight Chart
         function addSeriesCompat(type, options) {
-            // Lightweight Charts v5 uses addSeries(Constructor, options), while v4 uses addXSeries.
             const v5Map = {
                 candlestick: LightweightCharts.CandlestickSeries,
                 line: LightweightCharts.LineSeries,
                 histogram: LightweightCharts.HistogramSeries
             };
-
             const v4MethodMap = {
                 candlestick: 'addCandlestickSeries',
                 line: 'addLineSeries',
@@ -735,18 +1805,14 @@
             if (chart && typeof chart[v4Method] === 'function') {
                 return chart[v4Method](options);
             }
-
             if (chart && typeof chart.addSeries === 'function' && v5Map[type]) {
                 return chart.addSeries(v5Map[type], options);
             }
-
-            throw new Error('Unsupported Lightweight Charts version: could not create series');
+            throw new Error('Unsupported Lightweight Charts version');
         }
 
         function initChart() {
             const container = document.getElementById('chart-container');
-            
-            // Clear any existing contents
             container.innerHTML = '';
             
             chart = LightweightCharts.createChart(container, {
@@ -762,28 +1828,13 @@
                 },
                 crosshair: {
                     mode: LightweightCharts.CrosshairMode.Normal,
-                    vertLine: {
-                        color: 'rgba(88, 166, 255, 0.4)',
-                        width: 1,
-                        style: 0,
-                    },
-                    horzLine: {
-                        color: 'rgba(88, 166, 255, 0.4)',
-                        width: 1,
-                        style: 0,
-                    },
+                    vertLine: { color: 'rgba(88, 166, 255, 0.4)', width: 1 },
+                    horzLine: { color: 'rgba(88, 166, 255, 0.4)', width: 1 },
                 },
-                rightPriceScale: {
-                    borderColor: '#30363d',
-                },
-                timeScale: {
-                    borderColor: '#30363d',
-                    timeVisible: true,
-                    secondsVisible: false,
-                },
+                rightPriceScale: { borderColor: '#30363d' },
+                timeScale: { borderColor: '#30363d', timeVisible: true, secondsVisible: false },
             });
 
-            // Create Candlestick series
             candlestickSeries = addSeriesCompat('candlestick', {
                 upColor: '#26a69a',
                 downColor: '#ef5350',
@@ -792,91 +1843,28 @@
                 wickDownColor: '#ef5350',
             });
 
-            // Create Line series
             lineSeries = addSeriesCompat('line', {
                 color: '#58a6ff',
                 lineWidth: 2,
-                visible: false, // Default hidden
+                visible: false,
             });
 
-            // Create Volume series overlay (positioned at the bottom 20% of the chart)
             volumeSeries = addSeriesCompat('histogram', {
-                priceFormat: {
-                    type: 'volume',
-                },
-                priceScaleId: '', // Overlay style
+                priceFormat: { type: 'volume' },
+                priceScaleId: '',
             });
             
             volumeSeries.priceScale().applyOptions({
-                scaleMargins: {
-                    top: 0.8, // Leave top 80% free for main series
-                    bottom: 0,
-                },
+                scaleMargins: { top: 0.8, bottom: 0 },
             });
 
-            // Set up click handlers for inspection
-            chart.subscribeClick((param) => {
-                const placeholder = document.getElementById('inspector-placeholder');
-                const infoPanel = document.getElementById('inspector-data');
-                
-                if (!param || !param.time) {
-                    // Clicked outside a data point - do not clear, let them keep details
-                    return;
-                }
-
-                // Retrieve data point from loaded data
-                const candleData = param.seriesData.get(currentChartType === 'candlestick' ? candlestickSeries : lineSeries);
-                const volData = param.seriesData.get(volumeSeries);
-                
-                if (candleData) {
-                    placeholder.style.display = 'none';
-                    infoPanel.style.display = 'grid';
-                    
-                    // Format time
-                    let formattedTime = '';
-                    if (typeof param.time === 'number') {
-                        // UNIX timestamp for intraday
-                        const d = new Date(param.time * 1000);
-                        formattedTime = d.toLocaleString();
-                    } else {
-                        // String YYYY-MM-DD
-                        formattedTime = param.time;
-                    }
-                    
-                    document.getElementById('inspect-time').innerText = formattedTime;
-                    
-                    if (currentChartType === 'candlestick') {
-                        document.getElementById('inspect-open').innerText = '$' + candleData.open.toFixed(2);
-                        document.getElementById('inspect-high').innerText = '$' + candleData.high.toFixed(2);
-                        document.getElementById('inspect-low').innerText = '$' + candleData.low.toFixed(2);
-                        document.getElementById('inspect-close').innerText = '$' + candleData.close.toFixed(2);
-                    } else {
-                        // Line series returns a single float price
-                        document.getElementById('inspect-open').innerText = 'N/A';
-                        document.getElementById('inspect-high').innerText = 'N/A';
-                        document.getElementById('inspect-low').innerText = 'N/A';
-                        document.getElementById('inspect-close').innerText = '$' + candleData.value.toFixed(2);
-                    }
-                    
-                    if (volData) {
-                        document.getElementById('inspect-volume').innerText = formatVolume(volData.value);
-                    } else {
-                        document.getElementById('inspect-volume').innerText = '—';
-                    }
-                }
-            });
-
-            // Handle browser resize
             const resizeObserver = new ResizeObserver(entries => {
                 if (entries.length === 0 || !chart) return;
-                const newWidth = entries[0].contentRect.width;
-                const newHeight = entries[0].contentRect.height;
-                chart.applyOptions({ width: newWidth, height: newHeight });
+                chart.applyOptions({ width: entries[0].contentRect.width, height: entries[0].contentRect.height });
             });
             resizeObserver.observe(container);
         }
 
-        // Switch chart styles
         function setChartType(type) {
             currentChartType = type;
             const btnCandles = document.getElementById('btn-candlestick');
@@ -895,112 +1883,290 @@
             }
         }
 
-        // Format volume helper (e.g. 1.2M, 500K)
         function formatVolume(val) {
-            if (val >= 1000000000) {
-                return (val / 1000000000).toFixed(2) + 'B';
-            }
-            if (val >= 1000000) {
-                return (val / 1000000).toFixed(2) + 'M';
-            }
-            if (val >= 1000) {
-                return (val / 1000).toFixed(1) + 'K';
-            }
-            return val.toString();
+            if (val >= 1000000000) return (val / 1000000000).toFixed(2) + 'B';
+            if (val >= 1000000) return (val / 1000000).toFixed(2) + 'M';
+            if (val >= 1000) return (val / 1000).toFixed(1) + 'K';
+            return val ? val.toString() : '0';
         }
 
-        // Fetch data from Flask API
+        function switchViewMode(mode) {
+            const dash = document.getElementById('view-dashboard');
+            const screen = document.getElementById('view-screener');
+            const port = document.getElementById('view-portfolio');
+            const learn = document.getElementById('view-learning');
+            const sidebar = document.getElementById('sidebar-panel');
+            const mainEl = document.getElementById('main-layout');
+
+            const tabSingle = document.getElementById('tab-single-btn');
+            const tabScreener = document.getElementById('tab-screener-btn');
+            const tabPort = document.getElementById('tab-portfolio-btn');
+            const tabLearn = document.getElementById('tab-learning-btn');
+
+            dash.style.display = 'none';
+            screen.classList.remove('active');
+            port.classList.remove('active');
+            learn.classList.remove('active');
+            tabSingle.classList.remove('active');
+            tabScreener.classList.remove('active');
+            tabPort.classList.remove('active');
+            tabLearn.classList.remove('active');
+
+            if (mode === 'screener') {
+                screen.classList.add('active');
+                tabScreener.classList.add('active');
+                sidebar.style.display = 'none';
+                mainEl.style.gridTemplateColumns = '1fr';
+                runScreener();
+            } else if (mode === 'portfolio') {
+                port.classList.add('active');
+                tabPort.classList.add('active');
+                sidebar.style.display = 'none';
+                mainEl.style.gridTemplateColumns = '1fr';
+                if (document.getElementById('port-alloc-tbody').children.length === 0) {
+                    runPortfolioBuilder();
+                }
+            } else if (mode === 'learning') {
+                learn.classList.add('active');
+                tabLearn.classList.add('active');
+                sidebar.style.display = 'none';
+                mainEl.style.gridTemplateColumns = '1fr';
+            } else {
+                dash.style.display = 'flex';
+                tabSingle.classList.add('active');
+                sidebar.style.display = 'flex';
+                mainEl.style.gridTemplateColumns = '340px 1fr';
+            }
+        }
+
+        function filterDictCards(category, btnEl) {
+            const chips = document.querySelectorAll('.filter-chip');
+            chips.forEach(c => c.classList.remove('active'));
+            btnEl.classList.add('active');
+
+            const cards = document.querySelectorAll('.dict-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-cat') === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function updatePortProgress(pct, statusText, stepIndex) {
+            const box = document.getElementById('port-progress-box');
+            const statusEl = document.getElementById('port-progress-status');
+            const pctEl = document.getElementById('port-progress-pct');
+            const fillEl = document.getElementById('port-progress-fill');
+
+            box.style.display = 'flex';
+            statusEl.innerText = statusText;
+            pctEl.innerText = pct + '%';
+            fillEl.style.width = pct + '%';
+
+            for (let i = 1; i <= 5; i++) {
+                const sEl = document.getElementById(`pstep-${i}`);
+                if (i < stepIndex) {
+                    sEl.className = 'stepper-item completed';
+                } else if (i === stepIndex) {
+                    sEl.className = 'stepper-item active';
+                } else {
+                    sEl.className = 'stepper-item';
+                }
+            }
+        }
+
+        async function runPortfolioBuilder() {
+            const tickers = document.getElementById('port-tickers-input').value.trim();
+            const model_type = document.getElementById('port-model-select').value;
+            const capital = document.getElementById('port-capital-input').value;
+            const risk_tolerance = document.getElementById('port-risk-select').value;
+            const goal = document.getElementById('port-goal-select').value;
+
+            // Start animated progress stepper
+            updatePortProgress(15, '🚀 Connecting to Yahoo Finance API...', 1);
+            
+            setTimeout(() => {
+                updatePortProgress(40, '📥 Downloading historical OHLCV data for stock universe...', 2);
+            }, 300);
+
+            setTimeout(() => {
+                updatePortProgress(65, '📊 Computing covariance matrix & quantitative strategy factor scores...', 3);
+            }, 700);
+
+            setTimeout(() => {
+                updatePortProgress(85, `⚙️ Solving ${model_type.toUpperCase()} quadratic portfolio optimization...`, 4);
+            }, 1200);
+
+            try {
+                const res = await fetch('/api/portfolio', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tickers, model_type, capital, risk_tolerance, goal })
+                });
+
+                const data = await res.json();
+                if (!res.ok || data.error) throw new Error(data.error || 'Portfolio optimization failed');
+
+                updatePortProgress(100, '✨ Portfolio Optimized Successfully!', 5);
+
+                // Render KPI metrics
+                document.getElementById('port-metrics-grid').style.display = 'grid';
+                document.getElementById('port-allocations-card').style.display = 'flex';
+                document.getElementById('port-heatmap-card').style.display = 'flex';
+
+                document.getElementById('port-exp-return').innerText = (data.exp_return_pct >= 0 ? '+' : '') + data.exp_return_pct.toFixed(2) + '%';
+                document.getElementById('port-volatility').innerText = data.port_volatility_pct.toFixed(2) + '%';
+                document.getElementById('port-sharpe').innerText = data.sharpe_ratio;
+                document.getElementById('port-sortino').innerText = data.sortino_ratio;
+                document.getElementById('port-var-daily').innerText = '$' + data.var_95_daily_dollar.toLocaleString();
+                document.getElementById('port-var-monthly').innerText = 'Monthly VaR: $' + data.var_95_monthly_dollar.toLocaleString();
+                document.getElementById('port-drawdown').innerText = '-' + data.max_drawdown_pct.toFixed(2) + '%';
+
+                // Render Allocations Table
+                const tbody = document.getElementById('port-alloc-tbody');
+                tbody.innerHTML = '';
+                (data.allocations || []).forEach(alloc => {
+                    const tr = document.createElement('tr');
+                    const sigClass = alloc.quant_signal.includes('BUY') ? 'positive' : (alloc.quant_signal.includes('SELL') ? 'negative' : '');
+                    tr.innerHTML = `
+                        <td><strong>${alloc.ticker}</strong></td>
+                        <td>
+                            <div><strong>${alloc.weight_pct}%</strong></div>
+                            <div class="weight-progress-bar"><div class="weight-progress-fill" style="width:${alloc.weight_pct}%"></div></div>
+                        </td>
+                        <td><strong>$${alloc.target_dollar.toLocaleString()}</strong></td>
+                        <td><strong style="color:var(--accent-cyan);">${alloc.share_count} shares</strong></td>
+                        <td>$${alloc.last_price.toFixed(2)}</td>
+                        <td class="${sigClass}"><strong>${alloc.quant_signal} (${alloc.quant_score >= 0 ? '+' : ''}${alloc.quant_score}%)</strong></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                // Render Heatmap Matrix
+                const heatmap = document.getElementById('port-heatmap-table');
+                const cols = data.correlation_matrix.columns;
+                const vals = data.correlation_matrix.values;
+
+                let heatHtml = '<thead><tr><th></th>' + cols.map(c => `<th>${c}</th>`).join('') + '</tr></thead><tbody>';
+                vals.forEach((row, i) => {
+                    heatHtml += `<tr><th>${cols[i]}</th>`;
+                    row.forEach(val => {
+                        let bg = 'rgba(255,255,255,0.03)';
+                        if (val > 0.7 && val < 1.0) bg = 'rgba(239, 83, 80, 0.2)';
+                        else if (val < 0.3) bg = 'rgba(38, 166, 154, 0.2)';
+                        heatHtml += `<td style="background-color:${bg}">${val.toFixed(2)}</td>`;
+                    });
+                    heatHtml += '</tr>';
+                });
+                heatHtml += '</tbody>';
+                heatmap.innerHTML = heatHtml;
+
+                // Smooth scroll to metrics section
+                setTimeout(() => {
+                    document.getElementById('port-metrics-grid').scrollIntoView({ behavior: 'smooth' });
+                }, 300);
+
+            } catch (err) {
+                alert('Portfolio Error: ' + err.message);
+                document.getElementById('port-progress-status').innerText = '❌ Error: ' + err.message;
+            }
+        }
+
         async function fetchStockData() {
             const errorBanner = document.getElementById('error-banner');
             const loader = document.getElementById('loader-overlay');
 
-            if (!candlestickSeries || !lineSeries || !volumeSeries || !chart) {
-                errorBanner.innerText = 'Chart failed to initialize. Please refresh the page.';
-                errorBanner.classList.add('active');
-                return;
-            }
-            
-            // Hide error banner and show spinner
             errorBanner.classList.remove('active');
             loader.classList.add('active');
             
             const ticker = document.getElementById('ticker-input').value.trim();
+            const strategy = document.getElementById('strategy-select').value;
             const interval = document.getElementById('interval-select').value;
             const start = document.getElementById('start-date-input').value;
             const end = document.getElementById('end-date-input').value;
             
             try {
-                const response = await fetch(`/api/stock?ticker=${encodeURIComponent(ticker)}&interval=${interval}&start=${start}&end=${end}`);
+                const response = await fetch(`/api/stock?ticker=${encodeURIComponent(ticker)}&strategy=${strategy}&interval=${interval}&start=${start}&end=${end}`);
                 const data = await response.json();
                 
-                if (!response.ok) {
-                    throw new Error(data.error || 'Server error occurred while retrieving stock data');
-                }
+                if (!response.ok) throw new Error(data.error || 'Server error');
                 
-                // Populate Chart Data
                 loadedChartData = data.chart_data;
                 loadedVolumeData = data.volume_data;
                 
-                // Feed data into Chart Series
                 candlestickSeries.setData(loadedChartData);
-                
-                // Convert OHLC data into simple {time, value} objects for the line series
-                const lineData = loadedChartData.map(item => ({
-                    time: item.time,
-                    value: item.close
-                }));
-                lineSeries.setData(lineData);
-                
-                // Feed volume data
+                lineSeries.setData(loadedChartData.map(item => ({ time: item.time, value: item.close })));
                 volumeSeries.setData(loadedVolumeData);
                 
-                // Reset/adjust time scale view to fit all data
+                const activeStrat = data.active_strategy;
+                if (activeStrat && activeStrat.chart_markers && typeof candlestickSeries.setMarkers === 'function') {
+                    candlestickSeries.setMarkers(activeStrat.chart_markers);
+                }
+
                 chart.timeScale().fitContent();
+
+                document.getElementById('header-ticker-name').innerText = data.ticker;
+                const badge = document.getElementById('header-signal-badge');
+                const sig = activeStrat.signal;
+                badge.innerText = sig;
+                badge.className = 'signal-badge ' + (sig.includes('BUY') ? 'badge-strong-buy' : (sig.includes('SELL') ? 'badge-strong-sell' : 'badge-hold'));
                 
-                // Update titles
-                const tickerUpper = data.ticker;
-                document.getElementById('chart-main-title').innerText = `${tickerUpper} Interactive Chart`;
-                
-                let rangeStr = 'Full History';
-                if (start || end) {
-                    rangeStr = `${start || 'Start'} to ${end || 'End'}`;
-                }
-                document.getElementById('chart-sub-title').innerText = `${getIntervalName(interval)} interval, ${rangeStr}`;
-                
-                // Populate KPI stats
-                const stats = data.stats;
+                document.getElementById('header-signal-summary').innerText = `${activeStrat.name} • ${activeStrat.indicator_summary}`;
+
+                const setup = activeStrat.trade_setup;
+                document.getElementById('setup-entry').innerText = '$' + setup.entry_price.toFixed(2);
+                document.getElementById('setup-stop').innerText = '$' + setup.stop_loss.toFixed(2);
+                document.getElementById('setup-risk-sub').innerText = `Risk: $${setup.risk_per_share.toFixed(2)}/sh`;
+                document.getElementById('setup-target1').innerText = '$' + setup.target_1.toFixed(2);
+                document.getElementById('setup-reward-sub').innerText = `Reward: $${setup.reward_per_share.toFixed(2)} (${setup.risk_reward_ratio})`;
+                document.getElementById('setup-target2').innerText = '$' + setup.target_2.toFixed(2);
+
                 const lastClose = loadedChartData[loadedChartData.length - 1].close;
-                
-                // Price formatting
                 document.getElementById('kpi-last-close').innerText = '$' + lastClose.toFixed(2);
+                document.getElementById('kpi-last-time').innerText = `As of ${loadedChartData[loadedChartData.length - 1].time}`;
                 
-                // Format last date
-                let lastTimeStr = '';
-                const lastTimeVal = loadedChartData[loadedChartData.length - 1].time;
-                if (typeof lastTimeVal === 'number') {
-                    const dateObj = new Date(lastTimeVal * 1000);
-                    lastTimeStr = dateObj.toLocaleString();
-                } else {
-                    lastTimeStr = lastTimeVal;
-                }
-                document.getElementById('kpi-last-time').innerText = `As of ${lastTimeStr}`;
-                
-                // Return Rate format
-                const retVal = stats.return_pct;
+                const stats = data.stats;
                 const retEl = document.getElementById('kpi-return');
-                retEl.innerText = (retVal >= 0 ? '+' : '') + retVal.toFixed(2) + '%';
-                retEl.className = 'kpi-value ' + (retVal >= 0 ? 'positive' : 'negative');
+                retEl.innerText = (stats.return_pct >= 0 ? '+' : '') + stats.return_pct.toFixed(2) + '%';
+                retEl.className = 'kpi-value ' + (stats.return_pct >= 0 ? 'positive' : 'negative');
                 
-                // Range display
                 document.getElementById('kpi-high-low').innerText = `$${stats.highest.toFixed(2)} / $${stats.lowest.toFixed(2)}`;
-                
-                // Volume display
                 document.getElementById('kpi-volume').innerText = formatVolume(stats.volume);
-                
-                // Clear inspector panel back to placeholder
-                document.getElementById('inspector-placeholder').style.display = 'flex';
-                document.getElementById('inspector-data').style.display = 'none';
-                
+
+                document.getElementById('chart-main-title').innerText = `${data.ticker} Interactive Chart`;
+                document.getElementById('chart-sub-title').innerText = `${activeStrat.name} signals overlaid on ${data.interval} interval`;
+
+                const subList = document.getElementById('sub-strategies-list');
+                subList.innerHTML = '';
+                (data.sub_strategies || []).forEach(sub => {
+                    const div = document.createElement('div');
+                    div.className = 'strategy-item';
+                    const tagClass = sub.signal.includes('BUY') ? 'badge-buy' : (sub.signal.includes('SELL') ? 'badge-sell' : 'badge-hold');
+                    div.innerHTML = `
+                        <div>
+                            <div class="strat-name">${sub.name}</div>
+                            <div class="strat-summary">${sub.indicator_summary}</div>
+                        </div>
+                        <div class="strat-signal-tag ${tagClass}">${sub.signal} (${(sub.score * 100).toFixed(0)}%)</div>
+                    `;
+                    subList.appendChild(div);
+                });
+
+                const indTbody = document.getElementById('indicators-table-body');
+                indTbody.innerHTML = '';
+                (data.indicators_table || []).forEach(row => {
+                    const tr = document.createElement('tr');
+                    const sigColor = row.signal.includes('Bullish') || row.signal.includes('Oversold') ? 'positive' : (row.signal.includes('Bearish') || row.signal.includes('Overbought') ? 'negative' : '');
+                    tr.innerHTML = `
+                        <td><strong>${row.name}</strong></td>
+                        <td>${row.value}</td>
+                        <td class="${sigColor}"><strong>${row.signal}</strong></td>
+                    `;
+                    indTbody.appendChild(tr);
+                });
+
             } catch (err) {
                 console.error(err);
                 errorBanner.innerText = err.message;
@@ -1010,24 +2176,87 @@
             }
         }
 
-        function getIntervalName(code) {
-            const map = {
-                '1m': '1-Minute',
-                '5m': '5-Minute',
-                '15m': '15-Minute',
-                '1h': '1-Hour',
-                '1d': 'Daily',
-                '1wk': 'Weekly',
-                '1mo': 'Monthly'
-            };
-            return map[code] || code;
+        async function runBacktest() {
+            const ticker = document.getElementById('ticker-input').value.trim();
+            const strategy = document.getElementById('strategy-select').value;
+            const interval = document.getElementById('interval-select').value;
+
+            const btPanel = document.getElementById('backtest-panel');
+            const loader = document.getElementById('loader-overlay');
+            loader.classList.add('active');
+
+            try {
+                const res = await fetch(`/api/backtest?ticker=${encodeURIComponent(ticker)}&strategy=${strategy}&interval=${interval}`);
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Backtest failed');
+
+                btPanel.style.display = 'flex';
+                document.getElementById('bt-strat-name').innerText = data.strategy_name;
+
+                const stratRet = document.getElementById('bt-strat-return');
+                stratRet.innerText = (data.strategy_return_pct >= 0 ? '+' : '') + data.strategy_return_pct.toFixed(2) + '%';
+                stratRet.className = 'setup-val ' + (data.strategy_return_pct >= 0 ? 'positive' : 'negative');
+
+                const bhRet = document.getElementById('bt-buyhold-return');
+                bhRet.innerText = (data.buy_hold_return_pct >= 0 ? '+' : '') + data.buy_hold_return_pct.toFixed(2) + '%';
+                bhRet.className = 'setup-val ' + (data.buy_hold_return_pct >= 0 ? 'positive' : 'negative');
+
+                document.getElementById('bt-winrate').innerText = data.win_rate_pct + '%';
+                document.getElementById('bt-trades').innerText = `${data.total_trades} (${data.winning_trades}W / ${data.losing_trades}L)`;
+                document.getElementById('bt-profit-factor').innerText = data.profit_factor;
+                document.getElementById('bt-max-drawdown').innerText = '-' + data.max_drawdown_pct.toFixed(2) + '%';
+
+                btPanel.scrollIntoView({ behavior: 'smooth' });
+            } catch (err) {
+                alert('Backtest Error: ' + err.message);
+            } finally {
+                loader.classList.remove('active');
+            }
         }
 
-        // Initialize display datetime
+        async function runScreener() {
+            const tickers = document.getElementById('screener-tickers-input').value.trim();
+            const tbody = document.getElementById('screener-table-body');
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Running multi-stock screening...</td></tr>';
+
+            try {
+                const res = await fetch(`/api/screener?tickers=${encodeURIComponent(tickers)}`);
+                const data = await res.json();
+                
+                tbody.innerHTML = '';
+                (data.results || []).forEach(r => {
+                    const tr = document.createElement('tr');
+                    if (r.status === 'ok') {
+                        const tagClass = r.signal.includes('BUY') ? 'positive' : (r.signal.includes('SELL') ? 'negative' : '');
+                        tr.innerHTML = `
+                            <td><strong>${r.ticker}</strong></td>
+                            <td>$${r.last_price.toFixed(2)}</td>
+                            <td class="${r.change_pct >= 0 ? 'positive' : 'negative'}">${r.change_pct >= 0 ? '+' : ''}${r.change_pct.toFixed(2)}%</td>
+                            <td class="${tagClass}"><strong>${r.signal}</strong></td>
+                            <td>${r.score >= 0 ? '+' : ''}${r.score.toFixed(1)}%</td>
+                            <td class="negative">$${r.stop_loss.toFixed(2)}</td>
+                            <td class="positive">$${r.target_1.toFixed(2)}</td>
+                            <td><button class="btn-secondary" style="padding:0.3rem 0.6rem; font-size:0.75rem;" onclick="loadTickerFromScreener('${r.ticker}')">Analyze</button></td>
+                        `;
+                    } else {
+                        tr.innerHTML = `<td><strong>${r.ticker}</strong></td><td colspan="7" class="negative">Error: ${r.error}</td>`;
+                    }
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="8" class="negative">Screener error: ${err.message}</td></tr>`;
+            }
+        }
+
+        function loadTickerFromScreener(ticker) {
+            document.getElementById('ticker-input').value = ticker;
+            switchViewMode('chart');
+            fetchStockData();
+        }
+
         function updateTime() {
             const display = document.getElementById('current-time-display');
-            const now = new Date();
-            display.innerText = 'Server Time: ' + now.toLocaleTimeString();
+            display.innerText = 'Server Time: ' + new Date().toLocaleTimeString();
         }
 
         window.onload = () => {
