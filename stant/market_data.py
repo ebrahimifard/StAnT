@@ -42,10 +42,20 @@ def configure_yfinance_cache(cache_dir: Path = YFINANCE_CACHE_DIR) -> None:
     yf.set_tz_cache_location(str(cache_dir))
 
 
-def is_intraday(interval: str) -> bool:
-    """Return True for minute/hour intervals used by Lightweight Charts."""
+INTRADAY_INTERVALS = frozenset(
+    {"1m", "2m", "5m", "15m", "30m", "60m", "90m", "1h"}
+)
 
-    return any(unit in interval for unit in ("m", "h"))
+
+def is_intraday(interval: str) -> bool:
+    """Return True for minute/hour intervals used by Lightweight Charts.
+
+    Must be an exact match against yfinance's intraday interval vocabulary -
+    a substring check (e.g. "m" in interval) would misclassify "1mo"/"3mo"
+    (monthly) as intraday, since they contain "m" too.
+    """
+
+    return interval in INTRADAY_INTERVALS
 
 
 def get_ticker_candidates(ticker: str) -> list[str]:
@@ -80,9 +90,12 @@ def fetch_stock_history(
             start=start or None,
             end=end or None,
             timeout=10,
+            auto_adjust=True,
         )
 
-    return ticker_obj.history(interval=interval, period="max", timeout=10)
+    return ticker_obj.history(
+        interval=interval, period="max", timeout=10, auto_adjust=True
+    )
 
 
 def get_stock_data(

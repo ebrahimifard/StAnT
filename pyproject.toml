@@ -1,0 +1,7 @@
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+markers = [
+    "live: requires real network access to Yahoo Finance, excluded by default",
+]
+addopts = "-m 'not live'"

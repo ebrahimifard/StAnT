@@ -13,6 +13,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
+from stant.config import RISK_FREE_RATE_ANNUAL
 from stant.market_data import get_stock_data
 from stant.strategies import run_strategy_analysis
 
@@ -20,7 +21,11 @@ from stant.strategies import run_strategy_analysis
 DEFAULT_PORTFOLIO_TICKERS = ["AAPL", "MSFT", "NVDA", "TSLA", "GOOGL", "AMZN", "SPY"]
 
 
-def _optimize_max_sharpe(mean_returns: np.ndarray, cov_matrix: np.ndarray, risk_free_rate: float = 0.04) -> np.ndarray:
+def _optimize_max_sharpe(
+    mean_returns: np.ndarray,
+    cov_matrix: np.ndarray,
+    risk_free_rate: float = RISK_FREE_RATE_ANNUAL,
+) -> np.ndarray:
     """Iterative optimization to find Max Sharpe Ratio weights."""
     n = len(mean_returns)
     best_sharpe = -999.0
@@ -197,7 +202,7 @@ def build_optimized_portfolio(
     exp_return_pct = float(np.dot(final_weights, mean_annual) * 100)
     port_volatility_pct = float(np.sqrt(np.dot(final_weights.T, np.dot(cov_annual, final_weights))) * 100)
 
-    rf_rate = 4.0  # 4% Risk-free rate
+    rf_rate = RISK_FREE_RATE_ANNUAL * 100  # stant.config stores this as a decimal; portfolio metrics use percent
     sharpe_ratio = (exp_return_pct - rf_rate) / port_volatility_pct if port_volatility_pct > 0 else 0.0
 
     # Downside Semi-Deviation for Sortino Ratio

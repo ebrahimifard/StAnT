@@ -54,7 +54,22 @@ STRATEGY_NAMES = {
     "keltner_squeeze": "💎 Keltner Channel Volatility Compression",
     "parabolic_sar": "📍 Parabolic SAR Trailing Reversal",
     "vwap_profile": "📊 Session VWAP Band Profile Reversion",
-    "ml_quant": "🤖 Weighted Quant Score (Multi-Factor)",
+    "ml_quant": "🧮 Composite Quant Score (Multi-Factor)",
+}
+
+
+ENSEMBLE_WEIGHTS = {
+    "sma_cross": 0.10,
+    "rsi_reversion": 0.08,
+    "macd_cross": 0.10,
+    "bollinger": 0.08,
+    "stochastic": 0.08,
+    "supertrend": 0.10,
+    "ichimoku": 0.12,
+    "keltner_squeeze": 0.08,
+    "parabolic_sar": 0.08,
+    "vwap_profile": 0.08,
+    "ml_quant": 0.10,
 }
 
 
@@ -567,7 +582,7 @@ def evaluate_ml_quant(df: pd.DataFrame, interval: str = "1d") -> StrategyResult:
     score += (0.15 if adx > 25 else 0.0)
 
     score = float(np.clip(score, -1.0, 1.0))
-    prob = round((score + 1.0) / 2.0 * 100, 1)
+    composite_pct = round((score + 1.0) / 2.0 * 100, 1)
 
     if score >= 0.35:
         signal = "STRONG BUY" if score >= 0.7 else "BUY"
@@ -579,9 +594,9 @@ def evaluate_ml_quant(df: pd.DataFrame, interval: str = "1d") -> StrategyResult:
     frame_reset = df.reset_index()
     time_col = frame_reset.columns[0]
     time_val = _format_time(frame_reset.iloc[-1][time_col], interval)
-    markers = [{"time": time_val, "position": "belowBar" if score>0 else "aboveBar", "color": "#26a69a" if score>0 else "#ef5350", "shape": "circle", "text": f"ML Prob {prob}%"}]
+    markers = [{"time": time_val, "position": "belowBar" if score>0 else "aboveBar", "color": "#26a69a" if score>0 else "#ef5350", "shape": "circle", "text": f"Quant Score {composite_pct}%"}]
 
-    summary = f"Predictive Bullish Probability: {prob}% (Multi-Factor Quant Model)"
+    summary = f"Composite Quant Score: {composite_pct}% (static hand-weighted multi-factor blend, not a trained model)"
     last_close = float(df["Close"].iloc[-1])
     atr_val = float(df["ATR_14"].iloc[-1])
     setup = asdict(compute_trade_setup(df, signal, last_close, atr_val))
@@ -605,21 +620,7 @@ def evaluate_ensemble_consensus(df: pd.DataFrame, interval: str = "1d") -> tuple
         evaluate_ml_quant(df, interval),
     ]
 
-    weights = {
-        "sma_cross": 0.10,
-        "rsi_reversion": 0.08,
-        "macd_cross": 0.10,
-        "bollinger": 0.08,
-        "stochastic": 0.08,
-        "supertrend": 0.10,
-        "ichimoku": 0.12,
-        "keltner_squeeze": 0.08,
-        "parabolic_sar": 0.08,
-        "vwap_profile": 0.08,
-        "ml_quant": 0.10,
-    }
-
-    total_score = sum(res.score * weights.get(res.key, 0.09) for res in sub_results)
+    total_score = sum(res.score * ENSEMBLE_WEIGHTS.get(res.key, 0.09) for res in sub_results)
 
     if total_score >= 0.55:
         recommendation = "STRONG BUY"

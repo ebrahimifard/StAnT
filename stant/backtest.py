@@ -12,6 +12,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
+from stant.config import RISK_FREE_RATE_ANNUAL
 from stant.indicators import calculate_all_indicators
 from stant.market_data import is_intraday
 from stant.strategies import (
@@ -30,7 +31,39 @@ from stant.strategies import (
 )
 
 
-RISK_FREE_RATE = 0.04
+RISK_FREE_RATE = RISK_FREE_RATE_ANNUAL
+
+# Bars-per-year used to annualize the Sharpe ratio, keyed by yfinance interval
+# string. A single hardcoded 252 (trading days/year) is only correct for daily
+# bars - using it for intraday bars silently understates/overstates volatility
+# and return scaling by a large factor. Minute/hour values assume a 6.5-hour
+# (390 minute) trading day.
+_TRADING_MINUTES_PER_DAY = 390
+_INTRADAY_MINUTES = {
+    "1m": 1,
+    "2m": 2,
+    "5m": 5,
+    "15m": 15,
+    "30m": 30,
+    "60m": 60,
+    "90m": 90,
+    "1h": 60,
+}
+PERIODS_PER_YEAR = {
+    "1d": 252.0,
+    "1wk": 52.0,
+    "1mo": 12.0,
+    "3mo": 4.0,
+    **{
+        interval: 252.0 * (_TRADING_MINUTES_PER_DAY / minutes)
+        for interval, minutes in _INTRADAY_MINUTES.items()
+    },
+}
+
+
+def _periods_per_year(interval: str) -> float:
+    """Return the annualization factor (bars/year) for a given interval."""
+    return PERIODS_PER_YEAR.get(interval, 252.0)
 
 
 def _format_time(timestamp: pd.Timestamp, interval: str) -> str | int:
@@ -79,9 +112,19 @@ def backtest_strategy(
     else:
         res, _ = evaluate_ensemble_consensus(df_ind, interval)
 
+    # Classify by the marker's chart "position", not its display text. Text
+    # substring matching (the previous approach: "BUY" in text or "Bullish" in
+    # text, else SELL) silently misclassified several real bullish markers as
+    # SELL - e.g. rsi_reversion's "RSI Oversold (...)", stochastic's "Stoch
+    # Oversold Cross", keltner_squeeze's "Keltner Upper Breakout", and every
+    # ml_quant marker ("ML Prob NN%" never contains "BUY"/"Bullish"), which
+    # meant the ml_quant backtest could never open a position at all. Every
+    # strategy consistently places bullish markers at "belowBar" (green,
+    # arrowUp) and bearish markers at "aboveBar" (red, arrowDown) - see
+    # tests/test_backtest.py::test_all_strategy_markers_use_consistent_position_convention.
     marker_map = {}
     for m in res.chart_markers:
-        marker_map[str(m["time"])] = "BUY" if "BUY" in m["text"] or "Bullish" in m["text"] else "SELL"
+        marker_map[str(m["time"])] = "BUY" if m.get("position") == "belowBar" else "SELL"
 
     frame_reset = df_ind.reset_index()
     time_col = frame_reset.columns[0]
@@ -91,6 +134,7 @@ def backtest_strategy(
 
     position = 0
     entry_price = 0.0
+    entry_time: str | int | None = None
     cash = initial_capital
     holdings = 0.0
 
@@ -113,6 +157,7 @@ def backtest_strategy(
         if sig == "BUY" and position == 0:
             position = 1
             entry_price = fill_price * (1 + cost_rate)
+            entry_time = t_val
             holdings = cash / entry_price
             cash = 0.0
         elif sig == "SELL" and position == 1:
@@ -121,7 +166,14 @@ def backtest_strategy(
             cash = holdings * exit_price
             pnl_pct = ((exit_price - entry_price) / entry_price) * 100
             pnl_val = cash - (holdings * entry_price)
-            trades.append({"entry": entry_price, "exit": exit_price, "pnl_pct": pnl_pct, "pnl_val": pnl_val})
+            trades.append({
+                "entry": entry_price,
+                "exit": exit_price,
+                "pnl_pct": pnl_pct,
+                "pnl_val": pnl_val,
+                "entry_time": entry_time,
+                "exit_time": t_val,
+            })
             holdings = 0.0
 
         current_equity = cash + (holdings * close_price) if position == 1 else cash
@@ -162,11 +214,13 @@ def backtest_strategy(
     drawdowns = (eq_values - running_max) / running_max
     max_drawdown_pct = abs(float(np.min(drawdowns))) * 100 if len(drawdowns) > 0 else 0.0
 
+    periods_per_year = _periods_per_year(interval)
     period_returns = np.diff(eq_values) / eq_values[:-1] if len(eq_values) > 1 else np.array([])
     period_returns = period_returns[np.isfinite(period_returns)]
     if len(period_returns) > 1 and np.std(period_returns) > 0:
         sharpe_ratio = float(
-            ((np.mean(period_returns) * 252) - RISK_FREE_RATE) / (np.std(period_returns) * np.sqrt(252))
+            ((np.mean(period_returns) * periods_per_year) - RISK_FREE_RATE)
+            / (np.std(period_returns) * np.sqrt(periods_per_year))
         )
     else:
         sharpe_ratio = 0.0
@@ -186,5 +240,6 @@ def backtest_strategy(
         "max_drawdown_pct": round(max_drawdown_pct, 2),
         "sharpe_ratio": round(sharpe_ratio, 2),
         "cost_bps_per_trade": cost_bps,
+        "trades": trades,
         "equity_curve": equity_curve,
     }
